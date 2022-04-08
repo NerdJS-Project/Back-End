@@ -23,19 +23,55 @@ app.use(express.json());
 
 app.use(require(`./routes/userRoutes`));
 app.use(require(`./routes/classRoutes`));
-app.use(require('./routes/lessonRoutes'));
-app.use(require('./routes/moduleRoutes'));
-app.use(require('./routes/unitRoutes'));
-app.use(require('./routes/quizRoutes'));
+app.use(require(`./routes/moduleRoutes`));
+app.use(require(`./routes/unitRoutes`));
+app.use(require(`./routes/lessonRoutes`));
+app.use(require(`./routes/quizRoutes`));
+
+const swaggerJSDoc = require('swagger-jsdoc');
+
+
+const swaggerDefinition = {
+  openapi: '3.0.0',
+  info: {
+    title: 'Express API for Learning App',
+    version: '1.0.0',
+    description:
+      'This is a REST API application made with Express. It retrieves data from mysql db.',
+    contact: {
+      name: 'NERDJS'
+    },
+  },
+  servers: [
+    {
+      url: 'http://localhost:3001/api',
+      description: 'Development server',
+    },
+  ],
+};
+
+
+const options = {
+  swaggerDefinition,
+  // Paths to files containing OpenAPI definitions
+  apis: ['./routes/*.js'],
+};
+const swaggerSpec = swaggerJSDoc(options);
+
+const swaggerUi = require('swagger-ui-express');
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+
+
 
 const databaseSetup = async () => {
     
     try{
         const connection = require("mysql").createPool({
             connectionLimit : 100,
-            host: "localhost",
-            user:"root",
-            password:"password",
+            host: "learningapp.co7gje9anfj6.us-east-1.rds.amazonaws.com",
+            user:"admin",
+            password:"Password123!",
             database:"nerdjs"
         });
 

@@ -5,16 +5,38 @@ const ServiceLocator = require("./ServiceLocator");
 const UserService = require("../UserService");
 const saltRounds = 10;
 const secret= "super-duper-secret";
+var uuid = require('uuid');
 
-async function authenticate(req, res, next){
+async function verifyUserType(req, res, next){
     /**
     * @type {UserService}
     */
     const userService = ServiceLocator.getService(UserService.name);
 
     try{
-        const { payload: user, error } = await userService.getUserByEmail(req.body);
+        const { payload: user, error } = await userService.getUserById(req.body);
 
+        if(error) {
+            res.status(400).json(error);
+        } else {
+            req.user_type=user.user_type;
+            next();
+        }
+     }catch(e){
+         console.log("an error occured");
+         res.status(500).end();
+     }
+};
+
+async function authenticate(req, res, next){
+    /**
+    * @type {UserService}
+    */
+    const userService = ServiceLocator.getService(UserService.name);
+    console.log(req);
+    try{
+        const { payload: user, error } = await userService.getUserByEmail(req.body);
+        console.log(user);
         if(error) {
             res.status(400).json(error);
         } else {
@@ -68,13 +90,21 @@ function verifyToken(req, res, next) {
           message: "Unauthorized!"
         });
       }
-      req.user_id = decoded.id;
+      req.body.user_id = decoded.id;
       next();
     });
 };
 
+function createUUID(req, res, next){
+    req.id = uuid.v4();
+    next();
+};
+
+
 module.exports = {
     authenticate : authenticate,
     encrypt : encrypt,
-    verifyToken : verifyToken
+    verifyToken : verifyToken,
+    verifyUserType : verifyUserType,
+    createUUID : createUUID
 }

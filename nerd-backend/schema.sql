@@ -2,7 +2,11 @@ Create database if not exists nerdjs;
 use nerdjs;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+
+>>>>>>> e3ba713c67eb52e5486e67aaa0391c238fe79c41
 drop table quizzes;
 >>>>>>> 407c170f1a29672f08edbfd1f0fc580b855edc6c
 drop table units; 
@@ -11,20 +15,23 @@ drop table modules;
 drop table classes;
 drop table user_table;
 
+
 create table user_table 
 (
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(30) NOT NULL,
     user_email VARCHAR(50),
-    user_password BINARY(60) NOT NULL,
+    unique(user_email),
+    user_password VARCHAR(150) NOT NULL,
     user_type VARCHAR(30)
 );
 create table classes
 (
-    class_id SERIAL NOT NULL,
+    class_id CHAR(36) NOT NULL,
     user_class BIGINT NOT NULL REFERENCES user_table(user_id),
     class_name VARCHAR(40) NOT NULL,
     class_descrip VARCHAR(100),
+    UNIQUE(class_name, user_class),
     unique key class_key (class_id, user_class)
 );
 create table modules
@@ -32,7 +39,8 @@ create table modules
   module_id SERIAL PRIMARY KEY,
   module_name VARCHAR(40) NOT NULL,
   module_descrip VARCHAR(100),
-  class_id INT REFERENCES classes(class_id)
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  class_id CHAR(36) NOT NULL REFERENCES classes(class_id)
 ); 
 create table lessons
 (
@@ -40,6 +48,7 @@ create table lessons
   lesson_name VARCHAR(30),
   lesson_descrip VARCHAR(100),
   lesson_index INT,
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
   module_id INT REFERENCES modules(module_id)
 );
 create table units
@@ -48,6 +57,7 @@ create table units
 	unit_index INT,
 	unit_name VARCHAR(30),
 	unit_content VARBINARY(500),
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
 	lesson_id INT REFERENCES lessons(lesson_id)
 <<<<<<< HEAD
 =======
@@ -60,6 +70,11 @@ create table quizzes
 	quiz_type VARCHAR(15),
 	quiz_content VARBINARY(500),
 	quiz_answers VARBINARY(500),
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
 	unit_id INT REFERENCES units(unit_id)
+<<<<<<< HEAD
 >>>>>>> 407c170f1a29672f08edbfd1f0fc580b855edc6c
 );
+=======
+);
+>>>>>>> e3ba713c67eb52e5486e67aaa0391c238fe79c41
