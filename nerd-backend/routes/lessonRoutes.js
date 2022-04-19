@@ -5,10 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const LessonService = require("../services/LessonService");
 
+const utcStr = new Date().toUTCString();
 //lesson routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access lesson route Time: ', Date.now());
+        console.log('Access lesson route Time: ', utcStr);
         next();
     })
 
@@ -31,8 +32,8 @@ router
     *       content:
     *         application/json:
     *           schema:
-    *             type: object
-    *             properties:
+    *              type: object
+    *              properties:
     *               module_id:
     *                 type: integer
     *               lesson_name:
@@ -41,16 +42,30 @@ router
     *                 type: string
     *               lesson_index:
     *                 type: integer
+    *               instructor_id:
+    *                 type: integer
     *     responses:
     *       201:
     *         description: The lesson was added to the database
     *         content:
     *           application/json:
     *             schema:
-    *               type: object
     *               properties:
-    *                 message: 
-    *                   type: boolean
+    *                 result:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       lesson_id: 
+    *                         type: integer
+    *                       lesson_name:
+    *                         type: string
+    *                       lesson_descrip:
+    *                         type: string
+    *                       lesson_index:
+    *                         type: integer
+    *                       instructor_id:
+    *                         type: integer
     *       400:
     *         description: The module was not added to the database
     *       401:
@@ -58,7 +73,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .post("/api/lesson/create", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/lesson/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyModuleAccess], async(req, res) => {
         /**
          * @type {LessonService}
          */
@@ -69,13 +84,15 @@ router
                     .json({message: "unauthorized user type"});
             }
         try{
-            const { payload: message, error } = await lessonService.createLesson(req.body);
+            const { payload: result, error } = await lessonService.createLesson(req.body);
             if(error) {
                 res.status(400).json(error);
             } else {
                 res
                     .status(201)
-                    .json({message: message});
+                    .json({
+                        result
+                    });
             }
         }catch(e){
             console.log("An error occured in lessonRoutes, post/lesson");

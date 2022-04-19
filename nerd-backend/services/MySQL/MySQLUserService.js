@@ -22,8 +22,8 @@ class MySQLUserService extends UserService {
     async createUser(userDTO) {
         const createUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO user_table (user_name, user_email, user_password, user_type) VALUES(?,?,?,?);",
-                values:[userDTO.user_name, userDTO.user_email, userDTO.user_password, userDTO.user_type]
+                sql: "INSERT INTO user_table (user_name, user_email,user_bio, user_pp, user_password, user_type) VALUES(?,?,?,?,?,?);",
+                values:[userDTO.user_name, userDTO.user_email, userDTO.user_bio, userDTO.user_pp, userDTO.user_password, userDTO.user_type]
             },
             (err, results) => {
                 if(err) {
@@ -50,7 +50,6 @@ class MySQLUserService extends UserService {
         /**
          * @type {Promise<import("../UserService").User>}
          */
-        console.log(userDTO);
         const getUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
 			/* maybe change this later*/ 
@@ -126,6 +125,54 @@ class MySQLUserService extends UserService {
             this.connection.query({
                 sql: "UPDATE user_table SET user_name=?, user_type=? WHERE user_id=?;",
                 values:[userDTO.user_name, userDTO.user_type, userDTO.user_id]
+            },
+            (err, results) => {
+                
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await updateUserCMD;
+            if(results.affectedRows>0) return new Result(true, null);
+            else return new Result(false, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+           
+    }
+
+    async updateBio(userDTO) {
+        const updateUserCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "UPDATE user_table SET user_bio=? WHERE user_bio=?;",
+                values:[userDTO.user_bio]
+            },
+            (err, results) => {
+                
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await updateUserCMD;
+            if(results.affectedRows>0) return new Result(true, null);
+            else return new Result(false, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+           
+    }
+
+    async updateProfilePic(userDTO) {
+        const updateUserCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "UPDATE user_table SET user_pp=? WHERE user_pp=?;",
+                values:[userDTO.user_pp]
             },
             (err, results) => {
                 

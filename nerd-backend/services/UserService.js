@@ -3,6 +3,8 @@
  * @property {number} user_id
  * @property {string} user_name
  * @property {string} user_email
+ * @property {string} user_bio
+ * @property {Blob} user_pp
  * @property {string} user_password
  * @property {string} user_type
  */
@@ -12,6 +14,8 @@
  * @property {number} user_id
  * @property {string} user_name
  * @property {string} user_email
+ * @property {string} user_bio
+ * @property {Blob} user_pp
  * @property {string} user_password
  * @property {string} user_type
  */

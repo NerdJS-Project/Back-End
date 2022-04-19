@@ -5,10 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const UserService = require("../services/UserService");
 
+const utcStr = new Date().toUTCString();
 //user routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access user route Time: ', Date.now());
+        console.log('Access user route Time: ', utcStr);
         next();
     })
     
@@ -343,7 +344,6 @@ router
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.deleteUser(req.body);

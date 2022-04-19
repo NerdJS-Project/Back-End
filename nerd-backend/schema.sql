@@ -1,14 +1,9 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
 
->>>>>>> e3ba713c67eb52e5486e67aaa0391c238fe79c41
 drop table quizzes;
->>>>>>> 407c170f1a29672f08edbfd1f0fc580b855edc6c
+
 drop table units; 
 drop table lessons;
 drop table modules;
@@ -21,6 +16,8 @@ create table user_table
     user_id SERIAL PRIMARY KEY,
     user_name VARCHAR(30) NOT NULL,
     user_email VARCHAR(50),
+    user_img VARBINARY(500),
+    user_bio VARCHAR(500),
     unique(user_email),
     user_password VARCHAR(150) NOT NULL,
     user_type VARCHAR(30)
@@ -59,8 +56,7 @@ create table units
 	unit_content VARBINARY(500),
   instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
 	lesson_id INT REFERENCES lessons(lesson_id)
-<<<<<<< HEAD
-=======
+
 );
 create table quizzes
 (
@@ -72,9 +68,35 @@ create table quizzes
 	quiz_answers VARBINARY(500),
   instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
 	unit_id INT REFERENCES units(unit_id)
-<<<<<<< HEAD
->>>>>>> 407c170f1a29672f08edbfd1f0fc580b855edc6c
+
 );
-=======
+
+
+create table scores
+(
+  user_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  quiz_id INT NOT NULL REFERENCES quizzes(quiz_id),
+  class_id CHAR(36) NOT NULL REFERENCES classes(class_id),
+  lesson_id INT NOT NULL REFERENCES lessons(lesson_id),
+  module_id INT NOT NULL REFERENCES modules(module_id),
+  unit_id INT NOT NULL REFERENCES units(unit_id),
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  score_id SERIAL PRIMARY KEY,
+  score INT,
+  date_graded TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  date_regraded TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  unique key score_key (user_id, quiz_id, class_id, lesson_id, module_id, score_id, unit_id, instructor_id)
 );
->>>>>>> e3ba713c67eb52e5486e67aaa0391c238fe79c41
+create table progress
+(
+  user_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  unit_id INT NOT NULL REFERENCES units(unit_id),
+  class_id CHAR(36) NOT NULL REFERENCES classes(class_id),
+  lesson_id INT NOT NULL REFERENCES lessons(lesson_id),
+  module_id INT NOT NULL REFERENCES modules(module_id),
+  instructor_id BIGINT NOT NULL REFERENCES user_table(user_id),
+  completed BOOLEAN DEFAULT FALSE,
+  date_completed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  unique key progress_key (user_id, unit_id, lesson_id, module_id, class_id, instructor_id)
+);
+
