@@ -48,10 +48,11 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<boolean>} 
      */
     async signUp(classDTO) {       
+        console.log(classDTO);
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "insert into classes (class_id, class_name, class_descrip, user_class) values(?,?,?,?);",
-                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id]
+                sql: "insert into classes (class_id, class_name, class_descrip, user_class, instructor_id) values(?,?,?,?,?);",
+                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id, classDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -80,7 +81,7 @@ class MySQLClassService extends ClassService {
         const getInstructorIdCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
-                values: [classDTO.class_id]
+                values: [classDTO.id]
             }, (err, results) => {
                 
                 if(err){
@@ -90,7 +91,7 @@ class MySQLClassService extends ClassService {
                 if(!results || results.length === 0){
                     var err = new Error("Class does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "NOT FOUND Instructor Id";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -147,7 +148,6 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<import("../ClassService").Class>>} 
      */
     async getClassById(classDTO){
-        console.log(classDTO.class_id);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */

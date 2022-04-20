@@ -156,7 +156,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
         /**
          * @type {ClassService}
          */
@@ -169,7 +169,7 @@ router
             }
         try{
             const { payload: newClass, error } = await classService.getClassById(req.body);
-            if(error) {
+            if(error) {    
                 res.status(400).json(error);
             } else {
                 req.body.class_name = newClass.class_name;
