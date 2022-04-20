@@ -336,6 +336,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -362,9 +366,7 @@ router
                     .status(200)
                     .json(
                         {
-                            class_id:result.class_id,
-                            class_name:result.class_name,
-                            class_descrip:result.class_descrip
+                            result
                         }
                     );
             }
@@ -406,6 +408,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -477,6 +483,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -543,6 +553,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
