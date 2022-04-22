@@ -21,7 +21,7 @@ async function verifyClassInstructor(req, res, next){
 
         if(error) {
             res.status(400).json(error);
-        } else {
+        } else {    
             if(result.instructor_id == req.body.user_id) {
                 next();
             } else {
