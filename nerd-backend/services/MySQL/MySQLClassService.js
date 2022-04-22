@@ -48,7 +48,6 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<boolean>} 
      */
     async signUp(classDTO) {       
-        console.log(classDTO);
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "insert into classes (class_id, class_name, class_descrip, user_class, instructor_id) values(?,?,?,?,?);",
@@ -72,16 +71,16 @@ class MySQLClassService extends ClassService {
     }
      /**
      * @param {import("../ClassService").ClassDTO} classDTO
-     * @returns {Promise<Result<Integer>>} 
      */
     async getInstructorId(classDTO){
+        console.log("getInstructorId: ", classDTO);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */
         const getInstructorIdCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
-                values: [classDTO.id]
+                values: [classDTO.class_id]
             }, (err, results) => {
                 
                 if(err){

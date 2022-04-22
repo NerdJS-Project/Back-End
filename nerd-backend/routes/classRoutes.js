@@ -120,7 +120,7 @@ router
 
     /**
     * @swagger
-    * /class/signup/{id}:
+    * /class/signup/{class_id}:
     *   post:
     *     tags:
     *       - Class
@@ -133,7 +133,7 @@ router
     *         required: true
     *         type: string
     *       - in: path
-    *         name: id
+    *         name: class_id
     *         description: class id
     *         required: true
     *         type: string
@@ -156,12 +156,12 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
+    .post("/api/class/signup/:class_id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
         /**
          * @type {ClassService}
          */
         const classService = ServiceLocator.getService(ClassService.name);
-        req.body.class_id = req.params.id;
+        req.body.class_id = req.params.class_id;
         if(req.user_type != "student") {
                 res
                     .status(201)
