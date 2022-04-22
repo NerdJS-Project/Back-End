@@ -264,12 +264,20 @@ router
                     r.forEach(function(item, index) {
                         var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)
                         if(end_result_index!==-1) {
-                            end_result[end_result_index].lessons.push({
-                                lesson_id: item.lesson_id,
-                                lesson_name: item.lesson_name,
-                                lesson_descrip: item.lesson_descrip,
-                                lesson_index: item.lesson_index
+                            dups = false;
+                            end_result[end_result_index].lessons.forEach((e) => {
+                                if(e.lesson_id === item.lesson_id) {
+                                    dups = true;
+                                }
                             })
+                            if(!dups){
+                                end_result[end_result_index].lessons.push({
+                                    lesson_id: item.lesson_id,
+                                    lesson_name: item.lesson_name,
+                                    lesson_descrip: item.lesson_descrip,
+                                    lesson_index: item.lesson_index
+                                })
+                            }
                         } else {
                             sub_obj = {
                                 module_id: item.module_id,
@@ -299,7 +307,7 @@ router
                     );
             }
         }catch(e){
-            console.log("an error occured in userRoutes,/api/class/modulesAndLessons/:id ");
+            console.log("an error occured in classRoutes,/api/class/modulesAndLessons/:id ");
             res.status(500).end();
         }
 
