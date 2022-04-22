@@ -70,7 +70,7 @@ class MySQLClassService extends ClassService {
         }
         
     }
-        /**
+     /**
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<Integer>>} 
      */
@@ -81,7 +81,7 @@ class MySQLClassService extends ClassService {
         const getInstructorIdCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
-                values: [classDTO.class_id]
+                values: [classDTO.id]
             }, (err, results) => {
                 
                 if(err){

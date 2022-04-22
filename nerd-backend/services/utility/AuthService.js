@@ -52,7 +52,7 @@ async function getClassInstructorId(req, res, next){
             next();
         }
      }catch(e){
-         console.log("an error occured");
+         console.log("an error occured in getClassInstructorId");
          res.status(500).end();
      }
 };
