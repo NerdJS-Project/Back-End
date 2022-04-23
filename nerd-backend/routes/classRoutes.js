@@ -262,7 +262,7 @@ router
                 end_result = []
                 try{
                     r.forEach(function(item, index) {
-                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)
+                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)     
                         if(end_result_index!==-1) {
                             dups = false;
                             end_result[end_result_index].lessons.forEach((e) => {
