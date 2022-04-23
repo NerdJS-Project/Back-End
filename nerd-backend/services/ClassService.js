@@ -87,7 +87,16 @@
      * @returns {Promise<Result<boolean>} 
      */
     async signUp(classDTO) { }
- 
+
+    /**
+     * @param {ClassDTO} classDTO
+    **/
+    async getAllModulesAndLessonsByClassId(classDTO) { }
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<Integer>>}
+    **/
+    async getInstructorId(classDTO) { }
 
  };
  

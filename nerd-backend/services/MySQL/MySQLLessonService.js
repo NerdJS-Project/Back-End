@@ -22,7 +22,7 @@ class MySQLLessonService extends LessonService {
     async createLesson(lessonDTO) {
         const createLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO lessons ( lesson_name, lesson_index, lesson_descrip, module_id, instructor_id) VALUES(?,?,?,?);",
+                sql: "INSERT INTO lessons ( lesson_name, lesson_index, lesson_descrip, module_id, instructor_id) VALUES(?,?,?,?,?);",
                 values:[ lessonDTO.lesson_name, lessonDTO.lesson_index, lessonDTO.lesson_descrip, lessonDTO.module_id, lessonDTO.user_id]
             },
             (err, results) => {
@@ -34,14 +34,71 @@ class MySQLLessonService extends LessonService {
         });
         try{
             const results = await createLessonCMD;
-            if(results.affectedRows>0) return new Result(true, null);
+            if(results.affectedRows>0) return this.getLastInsert();
             else return new Result(false, null);
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
         
     }
+    /**
+     * @param {import("../UnitService").UnitDTO} unitDTO
+     * @returns {Promise<Result<../LessonService>>}  
+     */
+    async getLessonId(unitDTO){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getModuleIdCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT * FROM lessons WHERE lesson_id=? and instructor_id=?;",
+                values: [unitDTO.lesson_id, unitDTO.instructor_id]
+            }, (err, results) => {
+                
+                if(err){
+                    return reject(err);
+                }
 
+                if(!results || results.length === 0){
+                    var err = new Error("Lesson does not exist!");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results[0]);
+            });
+        });
+        try{
+            const id = await getModuleIdCMD;
+            return new Result(id, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+    /**
+     * @returns {Promise<Result<../LessonService>Module} 
+     */
+         async getLastInsert() {
+            const getLastInsertCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+                    sql: "SELECT * FROM lessons WHERE lesson_id = (SELECT MAX(lesson_id) FROM lessons);"
+                },
+                (err, results) => {
+                    if(err) {
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const results = await getLastInsertCMD;
+                return new Result(results, null);
+            } catch(e) {
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+            
+        }
     /**
      * @param {import("../LessonService").lessonDTO} lessonDTO
      * @returns {Promise<Result<import("../LessonService").lesson>>} 
@@ -52,7 +109,7 @@ class MySQLLessonService extends LessonService {
          */
         const getLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Lessons WHERE lesson_id=?;",
+                sql:"SELECT * FROM lessons WHERE lesson_id=?;",
                 values: [lessonDTO.lesson_id]
             }, (err, results) => {
                 
@@ -88,7 +145,7 @@ class MySQLLessonService extends LessonService {
          */
         const getLessonCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Lessons WHERE module_id=?;",
+                sql:"SELECT * FROM lessons WHERE module_id=?;",
                 values: [lessonDTO.module_id]
             }, (err, results) => {
                 

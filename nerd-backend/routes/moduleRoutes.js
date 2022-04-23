@@ -77,7 +77,6 @@ router
     *       500:
     *         description: An internal error occured
     */
-   
     .post("/api/module/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyClassExists, AuthService.verifyClassInstructor], async(req, res) => {
         /**
          * @type {ModuleService}

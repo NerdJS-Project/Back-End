@@ -8,6 +8,7 @@ const MySQLLessonService = require("./services/MySQL/MySQLLessonService");
 const MySQLUnitService = require("./services/MySQL/MySQLUnitService");
 const MySQLQuizService = require("./services/MySQL/MySQLQuizService");
 const MySQLQuizDataService = require("./services/MySQL/MySQLQuizDataService");
+const MySQLProgressService = require("./services/MySQL/MySQLProgressService");
 
 const UserService = require("./services/UserService");
 const ClassService = require("./services/ClassService");
@@ -16,6 +17,7 @@ const ModuleService = require("./services/ModuleService");
 const UnitService = require("./services/UnitService");
 const QuizService = require("./services/QuizService");
 const QuizDataService = require("./services/QuizDataService");
+const ProgressService = require("./services/ProgressService");
 
 const app = express();
 app.use(require('cors')());
@@ -30,6 +32,7 @@ app.use(require(`./routes/unitRoutes`));
 app.use(require(`./routes/lessonRoutes`));
 app.use(require(`./routes/quizRoutes`));
 app.use(require(`./routes/quizdataRoutes`));
+app.use(require(`./routes/progressRoutes`));
 
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -77,6 +80,13 @@ const databaseSetup = async () => {
             password:"Password123!",
             database:"nerdjs"
         });
+        // const connection = require("mysql").createPool({
+        //   connectionLimit : 100,
+        //   host: "localhost",
+        //   user:"root",
+        //   password:"password",
+        //   database:"nerdjs"
+        // });
 
         
         const userService = new MySQLUserService(connection);
@@ -86,6 +96,7 @@ const databaseSetup = async () => {
         const unitService = new MySQLUnitService(connection);
         const quizService = new MySQLQuizService(connection);
         const quizdataService = new MySQLQuizDataService(connection);
+        const progressService = new MySQLProgressService(connection);
 
         await userService.init();
         await classService.init();
@@ -102,6 +113,7 @@ const databaseSetup = async () => {
         ServiceLocator.setService(UnitService.name, unitService);
         ServiceLocator.setService(QuizService.name, quizService);
         ServiceLocator.setService(QuizDataService.name, quizdataService);
+        ServiceLocator.setService(ProgressService.name, progressService);
 
         console.log("UserService initialized");
         console.log("ClassService initialized");
@@ -110,6 +122,7 @@ const databaseSetup = async () => {
         console.log("UnitService initialized");
         console.log("QuizService initialized");
         console.log("QuizDataService initialized");
+        console.log("ProgressService initialized");
         console.log("Database set up complete");
     } catch(e){
         console.log(e);

@@ -5,11 +5,11 @@ const AuthService = require("../services/utility/AuthService");
 
 const UnitService = require("../services/UnitService");
 
-
+const utcStr = new Date().toUTCString();
 //unit routes
 router
     .use(function timeLog(req, res, next) {
-        console.log('Access unit route Time: ', Date.now());
+        console.log('Access unit route Time: ', utcStr);
         next();
     })
 
@@ -48,10 +48,22 @@ router
     *         content:
     *           application/json:
     *             schema:
-    *               type: object
     *               properties:
-    *                 message: 
-    *                   type: boolean
+    *                 result:
+    *                   type: array
+    *                   items:
+    *                     type: object
+    *                     properties:
+    *                       unit_id:
+    *                         type: integer
+    *                       unit_name:
+    *                         type: string
+    *                       unit_content:
+    *                         type: object
+    *                       lesson_id:
+    *                         type: integer
+    *                       instructor_id:
+    *                         type: integer
     *       400:
     *         description: Bad Request
     *         content:
@@ -75,20 +87,27 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/unit/create", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/unit/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyLessonAccess], async(req, res) => {
         /**
          * @type {UnitService}
          */
         const unitService = ServiceLocator.getService(UnitService.name);
+        if(req.user_type != "instructor") {
+            res
+                .status(401)
+                .json({message: "unauthorized user type"});
+        }
         req.body.user_id = req.user_id;
         try{
-            const { payload: message, error } = await unitService.createUnit(req.body);
+            const { payload: result, error } = await unitService.createUnit(req.body);
             if(error) {
                 res.status(400).json(error);
             } else {
                 res
                     .status(201)
-                    .json({message: message});
+                    .json({
+                        result
+                    });
             }
         }catch(e){
             console.log("An error occured in unitRoutes, post/unit");
@@ -98,6 +117,75 @@ router
         
     })
 
+    /**
+    * @swagger
+    * /unit/findByLesson/{id}:
+    *   get:
+    *     tags:
+    *       - Unit
+    *     summary: retrieve all units by lesson id
+    *     description: retrieve all units by lesson id
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: lesson id
+    *         required: true
+    *         type: integer
+    *     responses:
+    *       200:
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 unit_id:
+    *                   type: integer
+    *                 unit_name:
+    *                   type: string
+    *                 unit_content:
+    *                   type: string
+    *                 lesson_id:
+    *                   type: integer
+    *                 instructor_id:
+    *                   type: integer
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       500:
+    *         description: An internal error occured.
+    */
+     .get("/api/unit/findByLesson/:id", async(req, res) => {
+
+        /**
+         * @type {UnitService}
+         */
+        const unitService = ServiceLocator.getService(UnitService.name);
+        req.body.lesson_id = req.params.id;
+        try{
+            
+            const { payload: units, error } = await unitService.getUnitsByLessonId(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        units
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in unitRoutes, get/unit");
+            res.status(500).end();
+        }
+
+    })
     /**
     * @swagger
     * /unit/{id}:
