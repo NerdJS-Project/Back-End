@@ -22,7 +22,7 @@ class MySQLQuizDataService extends QuizDataService {
     async createQuizData(quizdataDTO) {
         const createQuizDataCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO quizdata (quizdata_question, quizdata_answers, quiz_id) VALUES(?,?,?);",
+                sql: "INSERT INTO quizdata (quiz_id, quizdata_question, quizdata_answers) VALUES(?,?,?);",
                 values:[quizdataDTO.quiz_id, quizdataDTO.quizdata_question, quizdataDTO.quizdata_answers]
             },
             (err, results) => {
