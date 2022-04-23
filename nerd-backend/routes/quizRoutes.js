@@ -201,10 +201,8 @@ router
                         {
                             quiz_id:quiz.quiz_id,
                             quiz_name:quiz.quiz_name,
-							quiz_type:quiz.quiz_type,
-                            quiz_content:quiz.quiz_content,
-							quiz_answers:answer.quiz_answers,
-                            unit_id:quiz.quiz_id
+                            unit_id:quiz.quiz_id,
+                            instructor_id:quiz.instructor_id
                         }
                     );
             }

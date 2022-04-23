@@ -21,7 +21,7 @@ async function verifyClassInstructor(req, res, next){
 
         if(error) {
             res.status(400).json(error);
-        } else {
+        } else {    
             if(result.instructor_id == req.body.user_id) {
                 next();
             } else {
@@ -33,6 +33,27 @@ async function verifyClassInstructor(req, res, next){
         }
      }catch(e){
          console.log("an error occured");
+         res.status(500).end();
+     }
+};
+
+async function getClassInstructorId(req, res, next){
+    console.log(req.params);
+    /**
+    * @type {ClassService}
+    */
+    const classService = ServiceLocator.getService(ClassService.name);
+    try{
+        const { payload: result, error } = await classService.getInstructorId(req.params);
+        
+        if(error) {
+            res.status(400).json(error);
+        } else {
+            req.body.instructor_id = result.instructor_id;
+            next();
+        }
+     }catch(e){
+         console.log("an error occured in getClassInstructorId");
          res.status(500).end();
      }
 };
@@ -269,4 +290,5 @@ module.exports = {
     verifyLessonAccess : verifyLessonAccess,
     verifyUnitAccess : verifyUnitAccess,
     getClassByUserIdAndClassId : getClassByUserIdAndClassId,
+    getClassInstructorId : getClassInstructorId,
 }

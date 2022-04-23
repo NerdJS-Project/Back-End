@@ -87,6 +87,7 @@ router
          */
         const classService = ServiceLocator.getService(ClassService.name);
         req.body.class_id = req.id;
+        req.body.instructor_id = req.body.user_id;
         if(req.user_type != "instructor") {
                 res
                     .status(401)
@@ -119,7 +120,7 @@ router
 
     /**
     * @swagger
-    * /class/signup/{id}:
+    * /class/signup/{class_id}:
     *   post:
     *     tags:
     *       - Class
@@ -132,7 +133,7 @@ router
     *         required: true
     *         type: string
     *       - in: path
-    *         name: id
+    *         name: class_id
     *         description: class id
     *         required: true
     *         type: string
@@ -155,12 +156,12 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/class/signup/:class_id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
         /**
          * @type {ClassService}
          */
         const classService = ServiceLocator.getService(ClassService.name);
-        req.body.class_id = req.params.id;
+        req.body.class_id = req.params.class_id;
         if(req.user_type != "student") {
                 res
                     .status(201)
@@ -168,7 +169,7 @@ router
             }
         try{
             const { payload: newClass, error } = await classService.getClassById(req.body);
-            if(error) {
+            if(error) {    
                 res.status(400).json(error);
             } else {
                 req.body.class_name = newClass.class_name;
@@ -261,14 +262,22 @@ router
                 end_result = []
                 try{
                     r.forEach(function(item, index) {
-                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)
+                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)     
                         if(end_result_index!==-1) {
-                            end_result[end_result_index].lessons.push({
-                                lesson_id: item.lesson_id,
-                                lesson_name: item.lesson_name,
-                                lesson_descrip: item.lesson_descrip,
-                                lesson_index: item.lesson_index
+                            dups = false;
+                            end_result[end_result_index].lessons.forEach((e) => {
+                                if(e.lesson_id === item.lesson_id) {
+                                    dups = true;
+                                }
                             })
+                            if(!dups){
+                                end_result[end_result_index].lessons.push({
+                                    lesson_id: item.lesson_id,
+                                    lesson_name: item.lesson_name,
+                                    lesson_descrip: item.lesson_descrip,
+                                    lesson_index: item.lesson_index
+                                })
+                            }
                         } else {
                             sub_obj = {
                                 module_id: item.module_id,
@@ -298,7 +307,7 @@ router
                     );
             }
         }catch(e){
-            console.log("an error occured in userRoutes,/api/class/modulesAndLessons/:id ");
+            console.log("an error occured in classRoutes,/api/class/modulesAndLessons/:id ");
             res.status(500).end();
         }
 
@@ -335,6 +344,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -361,9 +374,7 @@ router
                     .status(200)
                     .json(
                         {
-                            class_id:result.class_id,
-                            class_name:result.class_name,
-                            class_descrip:result.class_descrip
+                            result
                         }
                     );
             }
@@ -405,6 +416,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -476,6 +491,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -542,6 +561,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:

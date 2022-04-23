@@ -20,10 +20,11 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<boolean>} 
      */
     async createClass(classDTO) {
+        console.log(classDTO);
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class) VALUES(?,?,?,?);",
-                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id]
+                sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class, instructor_id) VALUES(?,?,?,?,?);",
+                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id, classDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -49,8 +50,8 @@ class MySQLClassService extends ClassService {
     async signUp(classDTO) {       
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "insert into classes (class_id, class_name, class_descrip, user_class) values(?,?,?,?);",
-                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id]
+                sql: "insert into classes (class_id, class_name, class_descrip, user_class, instructor_id) values(?,?,?,?,?);",
+                values:[classDTO.class_id, classDTO.class_name, classDTO.class_descrip, classDTO.user_id, classDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -68,11 +69,11 @@ class MySQLClassService extends ClassService {
         }
         
     }
-        /**
+     /**
      * @param {import("../ClassService").ClassDTO} classDTO
-     * @returns {Promise<Result<Integer>>} 
      */
     async getInstructorId(classDTO){
+        console.log("getInstructorId: ", classDTO);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */
@@ -89,7 +90,7 @@ class MySQLClassService extends ClassService {
                 if(!results || results.length === 0){
                     var err = new Error("Class does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "NOT FOUND Instructor Id";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -146,7 +147,6 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<import("../ClassService").Class>>} 
      */
     async getClassById(classDTO){
-        console.log(classDTO.class_id);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */

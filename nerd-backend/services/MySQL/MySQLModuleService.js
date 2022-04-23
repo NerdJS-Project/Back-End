@@ -161,7 +161,7 @@ class MySQLModuleService extends ModuleService {
                     err.code = "NOT FOUND";
                     return reject(err);
                 }
-                resolve(results[0]);
+                resolve(results);
             });
         });
         try{

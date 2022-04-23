@@ -8,6 +8,7 @@ const MySQLLessonService = require("./services/MySQL/MySQLLessonService");
 const MySQLUnitService = require("./services/MySQL/MySQLUnitService");
 const MySQLQuizService = require("./services/MySQL/MySQLQuizService");
 const MySQLScoreService = require("./services/MySQL/MySQLScoreService");
+const MySQLQuizDataService = require("./services/MySQL/MySQLQuizDataService");
 const MySQLProgressService = require("./services/MySQL/MySQLProgressService");
 
 const UserService = require("./services/UserService");
@@ -17,6 +18,7 @@ const ModuleService = require("./services/ModuleService");
 const UnitService = require("./services/UnitService");
 const QuizService = require("./services/QuizService");
 const ScoreService = require("./services/ScoreService");
+const QuizDataService = require("./services/QuizDataService");
 const ProgressService = require("./services/ProgressService");
 
 const app = express();
@@ -32,6 +34,7 @@ app.use(require(`./routes/unitRoutes`));
 app.use(require(`./routes/lessonRoutes`));
 app.use(require(`./routes/quizRoutes`));
 app.use(require(`./routes/scoreRoutes`));
+app.use(require(`./routes/quizdataRoutes`));
 app.use(require(`./routes/progressRoutes`));
 
 const swaggerJSDoc = require('swagger-jsdoc');
@@ -96,6 +99,7 @@ const databaseSetup = async () => {
         const unitService = new MySQLUnitService(connection);
         const quizService = new MySQLQuizService(connection);
         const scoreService = new MySQLScoreService(connection);
+        const quizdataService = new MySQLQuizDataService(connection);
         const progressService = new MySQLProgressService(connection);
 
         await userService.init();
@@ -105,6 +109,7 @@ const databaseSetup = async () => {
         await unitService.init();
         await quizService.init();
         await scoreService.init();
+        await quizdataService.init();
 
         ServiceLocator.setService(UserService.name, userService);
         ServiceLocator.setService(ClassService.name, classService);
@@ -112,6 +117,7 @@ const databaseSetup = async () => {
         ServiceLocator.setService(LessonService.name, lessonService);
         ServiceLocator.setService(UnitService.name, unitService);
         ServiceLocator.setService(QuizService.name, quizService);
+        ServiceLocator.setService(QuizDataService.name, quizdataService);
         ServiceLocator.setService(ProgressService.name, progressService);
         ServiceLocator.setService(ScoreService.name, scoreService);
 
@@ -121,6 +127,7 @@ const databaseSetup = async () => {
         console.log("LessonService initialized");
         console.log("UnitService initialized");
         console.log("QuizService initialized");
+        console.log("QuizDataService initialized");
         console.log("ProgressService initialized");
         console.log("ScoreService initialized");
         console.log("Database set up complete");
