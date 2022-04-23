@@ -21,7 +21,7 @@ async function verifyClassInstructor(req, res, next){
 
         if(error) {
             res.status(400).json(error);
-        } else {
+        } else {    
             if(result.instructor_id == req.body.user_id) {
                 next();
             } else {
@@ -38,6 +38,7 @@ async function verifyClassInstructor(req, res, next){
 };
 
 async function getClassInstructorId(req, res, next){
+    console.log(req.params);
     /**
     * @type {ClassService}
     */
@@ -52,7 +53,7 @@ async function getClassInstructorId(req, res, next){
             next();
         }
      }catch(e){
-         console.log("an error occured");
+         console.log("an error occured in getClassInstructorId");
          res.status(500).end();
      }
 };
