@@ -38,6 +38,8 @@ router
     *                 type: string
     *               unit_content:
     *                 type: string
+    *               unit_content_type:
+    *                 type: string
     *               lesson_id:
     *                 type: integer
     *               instructor_id:
@@ -59,7 +61,9 @@ router
     *                       unit_name:
     *                         type: string
     *                       unit_content:
-    *                         type: object
+    *                         type: string
+    *                       unit_content_type:
+    *                         type: string
     *                       lesson_id:
     *                         type: integer
     *                       instructor_id:
