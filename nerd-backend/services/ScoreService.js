@@ -2,7 +2,7 @@
  * @typedef {Object} Score
  * @property {number} user_id
  * @property {number} quiz_id
- * @property {number} class_id
+ * @property {string} class_id
  * @property {number} lesson_id
  * @property {number} module_id
  * @property {number} unit_id
@@ -17,7 +17,7 @@
  * @typedef {Object} ScoreDTO
  * @property {number} user_id
  * @property {number} quiz_id
- * @property {number} class_id
+ * @property {string} class_id
  * @property {number} lesson_id
  * @property {number} module_id
  * @property {number} unit_id

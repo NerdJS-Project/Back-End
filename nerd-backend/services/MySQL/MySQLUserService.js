@@ -145,10 +145,10 @@ class MySQLUserService extends UserService {
     }
 
     async updateBio(userDTO) {
-        const updateUserCMD = new Promise((resolve, reject) => {
+        const updateBioCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE user_table SET user_bio=? WHERE user_bio=?;",
-                values:[userDTO.user_bio]
+                sql: "UPDATE user_table SET user_bio=? WHERE user_id=?;",
+                values:[userDTO.user_bio,userDTO.user_id]
             },
             (err, results) => {
                 
@@ -159,7 +159,7 @@ class MySQLUserService extends UserService {
             });
         });
         try{
-            const results = await updateUserCMD;
+            const results = await updateBioCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {
@@ -169,10 +169,10 @@ class MySQLUserService extends UserService {
     }
 
     async updateProfilePic(userDTO) {
-        const updateUserCMD = new Promise((resolve, reject) => {
+        const updatePPCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE user_table SET user_pp=? WHERE user_pp=?;",
-                values:[userDTO.user_pp]
+                sql: "UPDATE user_table SET user_pp=? WHERE user_id=?;",
+                values:[userDTO.user_pp,userDTO.user_id]
             },
             (err, results) => {
                 
@@ -183,7 +183,7 @@ class MySQLUserService extends UserService {
             });
         });
         try{
-            const results = await updateUserCMD;
+            const results = await updatePPCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {

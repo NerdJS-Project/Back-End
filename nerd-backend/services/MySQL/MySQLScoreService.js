@@ -22,8 +22,8 @@ class MySQLScoreService extends ScoreService {
     async createScore(scoreDTO) {
         const createScoreCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO scores (user_id,quiz_id,class_id,lesson_id,module_id,unit_id,instructor_id,score,date_graded,date_regraded) VALUES(?,?,?,?,?,?,?,?,?,?,?);",
-                values:[scoreDTO.user_id,scoreDTO.quiz_id,scoreDTO.class_id,scoreDTO.lesson_id,scoreDTO.module_id,scoreDTO.unit_id,scoreDTO.instructor_id,scoreDTO.score,scoreDTO.date_graded,scoreDTO.date_regraded]
+                sql: "INSERT INTO scores (user_id,quiz_id,class_id,lesson_id,module_id,unit_id,instructor_id,score) VALUES(?,?,?,?,?,?,?,?);",
+                values:[scoreDTO.user_id,scoreDTO.quiz_id,scoreDTO.class_id,scoreDTO.lesson_id,scoreDTO.module_id,scoreDTO.unit_id,scoreDTO.instructor_id,scoreDTO.score]
             },
             (err, results) => {
                 if(err) {
@@ -33,9 +33,35 @@ class MySQLScoreService extends ScoreService {
             });
         });
         try{
-            const results = await createScoreCMD;
-            if(results.affectedRows>0) return new Result(true, null);
+
+            const result = await createScoreCMD;
+            if(result.affectedRows>0) return this.getLastInsert();
             else return new Result(false, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+        
+    }
+
+           /**
+     * @returns {Promise<Result<../ScoreService>Score} 
+     */
+    async getLastInsert() {
+        const getLastInsertCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "SELECT * FROM scores WHERE score_id = (SELECT MAX(score_id) FROM scores);"
+            },
+            (err, results) => {
+                if(err) {
+                    console.log(err);
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await getLastInsertCMD;
+            return new Result(results, null);
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
@@ -53,8 +79,8 @@ class MySQLScoreService extends ScoreService {
          */
         const getScoreCMD = new Promise((resolve, reject) => {
             this.connection.query({
-			/* maybe change this later*/ 
-                sql:"SELECT score FROM scores WHERE score_id=?,quiz_id=?,instructor_id=?;",
+
+                sql:"SELECT * FROM scores WHERE score_id=?;",
                 values: [scoreDTO.score_id]
             }, (err, results) => {
                 
@@ -68,7 +94,7 @@ class MySQLScoreService extends ScoreService {
                     err.code = "NOT FOUND";
                     return reject(err);
                 }
-                resolve(results[0]);
+                resolve(results);
             });
         });
         try{
@@ -87,8 +113,8 @@ class MySQLScoreService extends ScoreService {
     async updateScore(scoreDTO) {
         const updateScoreCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE scores SET date_regraded=?, score=? WHERE score_id=?;",
-                values:[scoreDTO.date_regraded, scoreDTO.score, scoreDTO.score_id]
+                sql: "UPDATE scores SET score=? WHERE score_id=?;",
+                values:[scoreDTO.score, scoreDTO.score_id]
             },
             (err, results) => {
                 
@@ -115,8 +141,8 @@ class MySQLScoreService extends ScoreService {
     async deleteScore(scoreDTO) {
         const deleteScoreCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM scores WHERE score_id=?,user_id=?,quiz_id=?;",
-                values:[scoreDTO.score_id,scoreDTO.user_id,scoreDTO.quiz_id]
+                sql: "DELETE FROM scores WHERE score_id=?;",
+                values:[scoreDTO.score_id]
             },
             (err, results) => {
                 
