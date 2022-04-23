@@ -5,6 +5,7 @@ drop table progress;
 drop table scores;
 drop table quizdata;
 drop table quizzes;
+
 drop table units; 
 drop table lessons;
 drop table modules;

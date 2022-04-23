@@ -23,8 +23,8 @@ class MySQLUnitService extends UnitService {
     async createUnit(unitDTO) {
         const createUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO units ( unit_name, unit_content, lesson_id, instructor_id) VALUES(?,?,?,?);",
-                values:[unitDTO.unit_name, unitDTO.unit_content, unitDTO.lesson_id, unitDTO.instructor_id]
+                sql: "INSERT INTO units ( unit_name, unit_content, unit_content_type, lesson_id, instructor_id) VALUES(?,?,?,?);",
+                values:[unitDTO.unit_name, unitDTO.unit_content, unitDTO.unit_content_type, unitDTO.lesson_id, unitDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -302,6 +302,31 @@ class MySQLUnitService extends UnitService {
         });
         try{
             const results = await updateUnitCMD;
+            if(results.affectedRows>0) return new Result(true, null);
+            else return new Result(false, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+           
+    }
+
+    async updateUnitType(unitDTO) {
+        const updateUnitTypeCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "UPDATE units SET unit_content_type=? WHERE unit_id=?;",
+                values:[unitDTO.unit_content_type, unitDTO.unit_id]
+            },
+            (err, results) => {
+                
+                if(err) {
+                    
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await updateUnitTypeCMD;
             if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
         } catch(e) {

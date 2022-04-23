@@ -263,7 +263,7 @@ router
 
     /**
     * @swagger
-    * /unit/update/{id}:
+    * /unit/updateType/{id}:
     *   put:
     *     tags:
     *       - Unit
@@ -328,7 +328,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .put("/api/unit/update/:id", AuthService.verifyToken, async(req, res) => {
+    .put("/api/unit/updateType/:id", AuthService.verifyToken, async(req, res) => {
 
         /**
          * @type {unitService}
@@ -337,7 +337,7 @@ router
         req.body.unit_id = req.params.id;
         try{
             
-            const { payload: message, error } = await unitService.updateUnit(req.body);
+            const { payload: message, error } = await unitService.updateUnitType(req.body);
 
             if(error) {
                 res.status(400).json(error);
