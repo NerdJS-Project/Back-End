@@ -39,13 +39,6 @@
       * @param {QuizDataDTO} quizdataDTO
       * @returns {Promise<Result<quiz>>}
       */
-     updateQuizData(quizdataDTO) { }
- 
-
-     /**
-      * @param {QuizDataDTO} quizdataDTO
-      * @returns {Promise<Result<quiz>>}
-      */
      getQuizData(quizdataDTO){ }
  
 
