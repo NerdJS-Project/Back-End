@@ -4,6 +4,7 @@
  * @property {number} unit_id
  * @property {number} unit_index
  * @property {string} unit_name
+ * @property {string} unit_content_type
  * @property {string} unit_content
  * @property {number} lesson_id
  */
@@ -13,6 +14,7 @@
  * @property {number} unit_id
  * @property {number} unit_index
  * @property {string} unit_name
+ * @property {string} unit_content_type
  * @property {string} unit_content
  * @property {number} lesson_id
  */
@@ -43,6 +45,12 @@
       * @returns {Promise<Result<Unit>>}
       */
      updateUnit(UnitDTO) { }
+
+       /** 
+      * @param {UnitDTO} UnitDTO
+      * @returns {Promise<Result<Unit>>}
+      */
+        updateUnitType(UnitDTO) { }
  
 
      /** 

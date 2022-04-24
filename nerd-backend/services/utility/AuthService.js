@@ -21,7 +21,7 @@ async function verifyClassInstructor(req, res, next){
 
         if(error) {
             res.status(400).json(error);
-        } else {
+        } else {    
             if(result.instructor_id == req.body.user_id) {
                 next();
             } else {
@@ -38,6 +38,7 @@ async function verifyClassInstructor(req, res, next){
 };
 
 async function getClassInstructorId(req, res, next){
+    console.log(req.params);
     /**
     * @type {ClassService}
     */
@@ -52,7 +53,7 @@ async function getClassInstructorId(req, res, next){
             next();
         }
      }catch(e){
-         console.log("an error occured");
+         console.log("an error occured in getClassInstructorId");
          res.status(500).end();
      }
 };
@@ -164,12 +165,12 @@ async function verifyClassExists(req, res, next){
     * @type {UnitService}
     */
     const unitService = ServiceLocator.getService(UnitService.name);
-
+     req.body.unit_id = parseInt(req.params.id);
      try{
-         const { payload: result, error } = await unitService.getUnitId(req.body);
+         const { payload: result, error } = await unitService.getUnit(req.body);
  
          if(error) {
-             res.status(400).json(error);
+             res.status(400).json("verifyUnitAccess caused: ",error);
          } else {
             if(result.instructor_id == req.body.user_id) {
                 next();
@@ -227,6 +228,8 @@ async function authenticate(req, res, next){
                     req.user_name=user.user_name;
                     req.user_type=user.user_type;
                     req.user_id=user.user_id;
+                    req.user_pp=user.user_pp;
+                    req.user_bio=user.user_bio;
                     req.token = jwt.sign({ id: user.user_id }, secret, {
                         expiresIn: 86400 // 24 hours
                     }); 
@@ -251,6 +254,18 @@ function encrypt(req, res, next){
         next();
     });
 };
+
+function verifyEmailAndPassword(req, res, next){
+    if(req.body.user_email && req.body.user_password){
+        next();
+    }
+    else{
+        res.status(400).json({
+            error: "Email and password are required."
+        });
+    }
+};
+
 
 function verifyToken(req, res, next) {
     let token = req.headers["token"];
@@ -290,4 +305,5 @@ module.exports = {
     verifyUnitAccess : verifyUnitAccess,
     getClassByUserIdAndClassId : getClassByUserIdAndClassId,
     getClassInstructorId : getClassInstructorId,
+    verifyEmailAndPassword : verifyEmailAndPassword
 }

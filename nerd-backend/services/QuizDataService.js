@@ -1,15 +1,17 @@
 /**
- * @typedef {Object} Quiz
+ * @typedef {Object} QuizData
  * @property {number} quiz_id
- * @property {string} quiz_name
+ * @property {string} quizdata_question
+ * @property {string} quizdata_answers
  * @property {number} unit_id
  * @property {number} instructor_id
  */
 
 /**
- * @typedef {Object} QuizDTO
+ * @typedef {Object} QuizDataDTO
  * @property {number} quiz_id
- * @property {string} quiz_name
+ * @property {string} quizdata_question
+ * @property {string} quizdata_answers
  * @property {number} unit_id
  * @property {number} instructor_id
  */
@@ -17,36 +19,29 @@
  const BaseService = require("./utility/BaseService");
  const Result = require("./utility/Result").Result;
  
- class QuizService extends BaseService{
+ class QuizDataService extends BaseService{
      
      /**
-      * @param {QuizDTO} quizDTO
+      * @param {QuizDataDTO} quizdataDTO
       * @returns {Promise<Result<quiz>>}
       */
-     createQuiz(quizDTO) { }
+     createQuizData(quizdataDTO) { }
 
 
      /**
       * @param {number} quiz_id
       * @returns {Promise<Result<boolean>>} 
       */
-     deleteQuiz(quiz_id) { }
+     deleteQuizData(quiz_id) { }
 
 
      /**
-      * @param {QuizDTO} quizDTO
+      * @param {QuizDataDTO} quizdataDTO
       * @returns {Promise<Result<quiz>>}
       */
-     updateQuiz(quizDTO) { }
- 
-
-     /**
-      * @param {QuizDTO} quizDTO
-      * @returns {Promise<Result<quiz>>}
-      */
-     getQuiz(quizDTO){ }
+     getQuizData(quizdataDTO){ }
  
 
  };
  
- module.exports = QuizService
+ module.exports = QuizDataService
