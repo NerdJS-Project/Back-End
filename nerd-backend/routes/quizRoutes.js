@@ -195,6 +195,68 @@ router
 
     })
 
+     /**
+    * @swagger
+    * /quiz/findByUnitId/{id}:
+    *   get:
+    *     tags:
+    *       - Quiz
+    *     summary: Retrieve a quiz by Unit ID.
+    *     description: Retrieve a single Quiz by Unit ID
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: id of the Unit to retrieve
+    *         type: string 
+    *     responses:
+    *       200:
+    *         description: Retrieved all quizzes by Unit ID.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 quiz_id:
+    *                   type: integer
+    *                   example: 1
+    *                 quiz_name:
+    *                   type: string
+    *                   example: "Module 1"
+    *                 unit_id:
+    *                   type: string
+    *                   example: "a2c77990-6baa-4fee-bc5a-0396dbd791d4"
+    *       400:
+    *         description: The module was not retrieved.
+    *       500:
+    *         description: An internal error occured.
+    */
+    .get("/api/quiz/findByUnitId/:id", async(req, res) => {
+
+        /**
+         * @type {QuizService}
+         */
+        const quizService = ServiceLocator.getService(QuizService.name);
+        req.body.unit_id = req.params.id;
+        try{
+            
+            const { payload: quizzes, error } = await quizService.getQuizByUnitId(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(quizzes);
+            }
+        }catch(e){
+            console.log("an error occured in quizRoutes, get/quiz");
+            res.status(500).end();
+        }
+
+    })
+
+
     /**
     * @swagger
     * /quiz/update/{id}:
