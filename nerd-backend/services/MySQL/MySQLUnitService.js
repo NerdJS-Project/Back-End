@@ -110,7 +110,7 @@ class MySQLUnitService extends UnitService {
          */
         const getUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Units WHERE unit_id=?;",
+                sql:"SELECT * FROM units WHERE unit_id=?;",
                 values: [unitDTO.unit_id]
             }, (err, results) => {
                 
