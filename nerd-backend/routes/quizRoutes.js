@@ -35,14 +35,6 @@ router
     *             properties:
     *               quiz_name:
     *                 type: string
-    *               quiz_index:
-    *                 type: integer
-    *               quiz_type:
-    *                 type: string
-    *               quiz_content:
-    *                 type: object
-    *               quiz_answers:
-    *                 type: object
     *               unit_id:
     *                 type: integer
     *               instructor_id:
@@ -61,14 +53,10 @@ router
     *                     properties:
     *                       quiz_name:
     *                         type: string
-    *                       quiz_index:
+    *                       quiz_id:
     *                         type: integer
-    *                       quiz_type:
-    *                         type: string
-    *                       quiz_content:
-    *                         type: object
-    *                       quiz_answers:
-    *                         type: object
+    *                       instructor_id:
+    *                         type: integer
     *                       unit_id:
     *                         type: integer
     *       400:
@@ -144,18 +132,12 @@ router
     *                 quiz:
     *                   type: object
     *                   properties:
-    *                     quiz_id:
-    *                       type: integer
     *                     quiz_name:
     *                       type: string
-    *                     quiz_index:
+    *                     quiz_id:
     *                       type: integer
-    *                     quiz_type:
-    *                       type: string
-    *                     quiz_content:
-    *                       type: string
-    *                     quiz_answers:
-    *                       type: string
+    *                     instructor_id:
+    *                       type: integer
     *                     unit_id:
     *                       type: integer
     *       400:
@@ -220,7 +202,7 @@ router
     *     tags:
     *       - Quiz
     *     summary: Update a quiz by id
-    *     description: Update a quiz by id
+    *     description: Update a quiz by id. Only the quiz name can be updated.
     *     parameters:
     *       - in: path
     *         name: id
@@ -241,16 +223,6 @@ router
     *             properties:
     *               quiz_name:
     *                 type: string
-    *               quiz_index:
-    *                 type: integer
-    *               quiz_type:
-    *                 type: string
-    *               quiz_content:
-    *                 type: string
-    *               quiz_answers:
-    *                 type: string
-    *               unit_id:
-    *                 type: integer
     *     responses:
     *       200:
     *         description: Successfully updated quiz
