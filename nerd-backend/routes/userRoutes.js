@@ -225,14 +225,7 @@ router
                 res
                     .status(200)
                     .json(
-                        {
-                            user_email:req.user_email,
-                            user_name:req.user_name,
-                            user_type:req.user_type,
-                            user_id:req.user_id,
-                            user_pp:req.user_pp,
-                            user_bio:req.user_bio
-                        }
+                        user
                     );
             }
         }catch(e){
