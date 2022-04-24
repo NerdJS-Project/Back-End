@@ -315,7 +315,7 @@ class MySQLUnitService extends UnitService {
         const updateUnitContentCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "UPDATE units SET unit_content_type=?, unit_content=? WHERE unit_id=?;",
-                values:[unitDTO.unit_content_type, unitDTO.content, unitDTO.unit_id]
+                values:[unitDTO.unit_content_type, unitDTO.unit_content, unitDTO.unit_id]
             },
             (err, results) => {
                 

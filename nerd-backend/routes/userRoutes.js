@@ -117,6 +117,10 @@ router
     *                   type: string
     *                 user_type:
     *                   type: string
+    *                 user_pp:
+    *                   type: string
+    *                 user_bio:
+    *                   type: string
     *       400:
     *         description: The user was not added to the database
     *       500:
@@ -140,7 +144,9 @@ router
                         user_email:req.user_email,
                         user_name:req.user_name,
                         user_type:req.user_type,
-                        user_id:req.user_id
+                        user_id:req.user_id,
+                        user_pp:req.user_pp,
+                        user_bio:req.user_bio
                     }
                 );
         }
@@ -189,6 +195,10 @@ router
     *                   type: string
     *                   description: The user's type.
     *                   example: admin
+    *                 user_pp:
+    *                   type: string
+    *                 user_bio:
+    *                   type: string
     *       400:
     *         description: The user was not retrieved.
     *       401:
@@ -216,10 +226,12 @@ router
                     .status(200)
                     .json(
                         {
-                            user_id:user.user_id,
-                            user_email:user.user_email,
-                            user_name:user.user_name,
-                            user_type:user.user_type
+                            user_email:req.user_email,
+                            user_name:req.user_name,
+                            user_type:req.user_type,
+                            user_id:req.user_id,
+                            user_pp:req.user_pp,
+                            user_bio:req.user_bio
                         }
                     );
             }
@@ -259,6 +271,10 @@ router
     *               user_name:
     *                 type: string
     *               user_type:
+    *                 type: string
+    *               user_pp:
+    *                 type: string
+    *               user_bio:
     *                 type: string
     *     responses:
     *       200:
