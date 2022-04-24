@@ -23,7 +23,7 @@ class MySQLUnitService extends UnitService {
     async createUnit(unitDTO) {
         const createUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO units ( unit_name, unit_content, unit_content_type, lesson_id, instructor_id) VALUES(?,?,?,?);",
+                sql: "INSERT INTO units ( unit_name, unit_content, unit_content_type, lesson_id, instructor_id) VALUES(?,?,?,?,?);",
                 values:[unitDTO.unit_name, unitDTO.unit_content, unitDTO.unit_content_type, unitDTO.lesson_id, unitDTO.instructor_id]
             },
             (err, results) => {

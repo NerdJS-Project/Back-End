@@ -66,6 +66,57 @@ router
 
     })
 
+    .get("/api/score/student/:id", AuthService.verifyToken, async(req, res) => {
+
+        /**
+         * @type {ScoreService}
+         */
+        const scoreService = ServiceLocator.getService(ScoreService.name);
+        req.body.user_id = req.params.id;
+        try{
+            
+            const { payload: score, error } = await scoreService.getScoreStudent(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(score );
+            }
+        }catch(e){
+            console.log("an error occured in scoreRoutes, get/score",e);
+            res.status(500).end();
+        }
+
+    })
+
+    .get("/api/score/instructor/:id", AuthService.verifyToken, async(req, res) => {
+
+        /**
+         * @type {ScoreService}
+         */
+        const scoreService = ServiceLocator.getService(ScoreService.name);
+        req.body.instructor_id = req.params.id;
+        try{
+            
+            const { payload: score, error } = await scoreService.getScoreInstructor(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(score );
+            }
+        }catch(e){
+            console.log("an error occured in scoreRoutes, get/score",e);
+            res.status(500).end();
+        }
+
+    })
+
+
    
     .put("/api/score/update/:id", AuthService.verifyToken, async(req, res) => {
 
