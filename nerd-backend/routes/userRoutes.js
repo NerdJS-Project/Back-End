@@ -36,6 +36,10 @@ router
     *                 type: string
     *               user_type:
     *                 type: string
+    *               user_pp:
+    *                 type: string
+    *               user_bio:
+    *                 type: string
     *     responses:
     *       201:
     *         description: The user was added to the database

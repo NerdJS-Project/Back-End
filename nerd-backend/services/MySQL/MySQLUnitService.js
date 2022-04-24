@@ -121,7 +121,7 @@ class MySQLUnitService extends UnitService {
                 if(!results || results.length === 0){
                     var err = new Error("Unit does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "NOT FOUND in getUnit";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -288,7 +288,7 @@ class MySQLUnitService extends UnitService {
     async updateUnit(unitDTO) {
         const updateUnitCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE units SET unit_name=?, unit_index=?,  WHERE unit_id=?;",
+                sql: "UPDATE units SET unit_name=?, unit_index=?  WHERE unit_id=?;",
                 values:[unitDTO.unit_name, unitDTO.unit_index, unitDTO.unit_id]
             },
             (err, results) => {
@@ -311,9 +311,10 @@ class MySQLUnitService extends UnitService {
     }
 
     async updateUnitContent(unitDTO) {
+        console.log(unitDTO);
         const updateUnitContentCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE units SET unit_content_type=?, unit_content, WHERE unit_id=?;",
+                sql: "UPDATE units SET unit_content_type=?, unit_content=? WHERE unit_id=?;",
                 values:[unitDTO.unit_content_type, unitDTO.content, unitDTO.unit_id]
             },
             (err, results) => {

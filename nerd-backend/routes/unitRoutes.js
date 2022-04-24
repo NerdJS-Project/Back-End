@@ -424,7 +424,6 @@ router
          * @type {unitService}
          */
         const unitService = ServiceLocator.getService(UnitService.name);
-        req.body.unit_id = req.params.id;
         if(req.user_type != "instructor"){
             res.status(401).json({message: "Can't Update: wrong user type "+ req.user_type});
         }

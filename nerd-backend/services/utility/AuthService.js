@@ -165,12 +165,12 @@ async function verifyClassExists(req, res, next){
     * @type {UnitService}
     */
     const unitService = ServiceLocator.getService(UnitService.name);
-
+     req.body.unit_id = parseInt(req.params.id);
      try{
          const { payload: result, error } = await unitService.getUnit(req.body);
  
          if(error) {
-             res.status(400).json(error);
+             res.status(400).json("verifyUnitAccess caused: ",error);
          } else {
             if(result.instructor_id == req.body.user_id) {
                 next();
@@ -228,6 +228,8 @@ async function authenticate(req, res, next){
                     req.user_name=user.user_name;
                     req.user_type=user.user_type;
                     req.user_id=user.user_id;
+                    req.user_pp=user.user_pp;
+                    req.user_bio=user.user_bio;
                     req.token = jwt.sign({ id: user.user_id }, secret, {
                         expiresIn: 86400 // 24 hours
                     }); 
