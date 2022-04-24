@@ -106,64 +106,6 @@ class MySQLQuizDataService extends QuizDataService {
     /**
      * @param {import("../QuizDataService").quizdataDTO} quizdataDTO
      * @returns {Promise<Result<boolean>} 
-     *//*
-    async updateQuizDataQuestion(quizdataDTO) {
-        const updateQuizDataCMD = new Promise((resolve, reject) => {
-            this.connection.query({
-                sql: "UPDATE quizdata SET quizdata_question=? WHERE quiz_id=?;",
-                values:[quizdataDTO.quizdata_question, quizdataDTO.quiz_id]
-            },
-            (err, results) => {
-                
-                if(err) {
-                    
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
-        try{
-            const results = await updateQuizCMD;
-            if(results.affectedRows>0) return new Result(true, null);
-            else return new Result(false, null);
-        } catch(e) {
-            return new Result(null, new IError(e.code, e.sqlMessage));
-        }
-           
-    }
-	
-	    /**
-     * @param {import("../QuizDataService").quizdataDTO} quizdataDTO
-     * @returns {Promise<Result<boolean>} 
-     *//*
-    async updateQuizDataAnswers(quizdataDTO) {
-        const updateQuizDataAnswersCMD = new Promise((resolve, reject) => {
-            this.connection.query({
-                sql: "UPDATE quizdata SET quizdata_answers=? WHERE quiz_id=?;",
-                values:[quizdataDTO.quizdata_answers, quizdataDTO.quiz_id]
-            },
-            (err, results) => {
-                
-                if(err) {
-                    
-                    return reject(err);
-                }
-                resolve(results);
-            });
-        });
-        try{
-            const results = await updateQuizCMD;
-            if(results.affectedRows>0) return new Result(true, null);
-            else return new Result(false, null);
-        } catch(e) {
-            return new Result(null, new IError(e.code, e.sqlMessage));
-        }
-           
-    }
-
-    /**
-     * @param {import("../QuizDataService").quizdataDTO} quizdataDTO
-     * @returns {Promise<Result<boolean>} 
      */
     async deleteQuizData(quizdataDTO) {
         const deleteQuizDataCMD = new Promise((resolve, reject) => {

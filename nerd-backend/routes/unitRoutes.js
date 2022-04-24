@@ -332,13 +332,16 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .put("/api/unit/updateType/:id", AuthService.verifyToken, async(req, res) => {
+    .put("/api/unit/updateType/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
 
         /**
          * @type {unitService}
          */
         const unitService = ServiceLocator.getService(UnitService.name);
         req.body.unit_id = req.params.id;
+        if(req.user_type != "instructor"){
+            res.status(401).json({message: "Can't Update: wrong user type "+ req.user_type});
+        }
         try{
             
             const { payload: message, error } = await unitService.updateUnitType(req.body);

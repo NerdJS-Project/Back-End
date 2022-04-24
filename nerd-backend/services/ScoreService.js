@@ -59,6 +59,20 @@
       * @returns {Promise<Result<score>>}
       */
      getScore(scoreDTO){ }
+
+      /**
+      * @param {ScoreDTO} scoreDTO
+      * @returns {Promise<Result<score>>}
+      */
+       getScoreStudent(scoreDTO){ }
+
+        /**
+      * @param {ScoreDTO} scoreDTO
+      * @returns {Promise<Result<score>>}
+      */
+     getScoreInstructor(scoreDTO){ }
+ 
+ 
  
 
  };

@@ -13,7 +13,7 @@ router
         next();
     })
  
-    .post("/api/quizdata/create", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
+    .post("/api/quizdata/create", async(req, res) => {
         /**
          * @type {QuizDataService}
          */
@@ -69,34 +69,8 @@ router
         }
 
     })
- 
-    .put("/api/quizdata/update/:id", AuthService.verifyToken, async(req, res) => {
-
-        /**
-         * @type {quizDataService}
-         */
-        const quizDataService = ServiceLocator.getService(QuizDataService.name);
-        req.body.quiz_id = req.params.id;
-        try{
-            
-            const { payload: message, error } = await quizDataService.updateQuizData(req.body);
-
-            if(error) {
-                res.status(400).json(error);
-            } else {
-                res
-                    .status(200)
-                    .json({message: message});
-            }
-        }catch(e){
-            console.log("an error occured in quizDataRoutes, put/quizdata");
-            res.status(500).end();
-        }
-
-    })
-
     
-    .delete("/api/quizdata/:id", AuthService.verifyToken, async(req, res) => {
+    .delete("/api/quizdata/:id", async(req, res) => {
 
         /**
          * @type {quizDataService}

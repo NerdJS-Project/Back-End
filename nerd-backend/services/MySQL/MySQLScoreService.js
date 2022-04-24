@@ -106,6 +106,80 @@ class MySQLScoreService extends ScoreService {
         }
     }
 
+       /**
+     * @param {import("../ScoreService").ScoreDTO} scoreDTO
+     * @returns {Promise<Result<import("../ScoreService").Score>>} 
+     */
+        async getScoreStudent(scoreDTO){
+            /**
+             * @type {Promise<import("../ScoreService").Score>}
+             */
+            const getScoreStudentCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+    
+                    sql:"SELECT * FROM scores WHERE user_id=? AND quiz_id=?;",
+                    values: [scoreDTO.user_id,scoreDTO.quiz_id]
+                }, (err, results) => {
+                    
+                    if(err){
+                        return reject(err);
+                    }
+    
+                    if(!results || results.length === 0){
+                        var err = new Error("Score does not exist!");
+                        err.errno = 1404;
+                        err.code = "NOT FOUND";
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const newScore = await getScoreStudentCMD;
+                return new Result(newScore, null);
+    
+            } catch(e) {
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+        }
+
+          /**
+     * @param {import("../ScoreService").ScoreDTO} scoreDTO
+     * @returns {Promise<Result<import("../ScoreService").Score>>} 
+     */
+           async getScoreInstructor(scoreDTO){
+            /**
+             * @type {Promise<import("../ScoreService").Score>}
+             */
+            const getScoreInstructorCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+    
+                    sql:"SELECT * FROM scores WHERE instructor_id=? AND quiz_id=?;",
+                    values: [scoreDTO.instructor_id,scoreDTO.quiz_id]
+                }, (err, results) => {
+                    
+                    if(err){
+                        return reject(err);
+                    }
+    
+                    if(!results || results.length === 0){
+                        var err = new Error("Score does not exist!");
+                        err.errno = 1404;
+                        err.code = "NOT FOUND";
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const newScore = await getScoreInstructorCMD;
+                return new Result(newScore, null);
+    
+            } catch(e) {
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+        }
+
         /**
      * @param {import("../ScoreService").ScoreDTO} scoreDTO
      * @returns {Promise<Result<boolean>>} 

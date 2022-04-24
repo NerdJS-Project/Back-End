@@ -143,7 +143,7 @@ class MySQLUserService extends UserService {
         }
            
     }
-
+    /* Alex updated */
     async updateBio(userDTO) {
         const updateBioCMD = new Promise((resolve, reject) => {
             this.connection.query({
@@ -167,7 +167,7 @@ class MySQLUserService extends UserService {
         }
            
     }
-
+    /* Alex updated */
     async updateProfilePic(userDTO) {
         const updatePPCMD = new Promise((resolve, reject) => {
             this.connection.query({
