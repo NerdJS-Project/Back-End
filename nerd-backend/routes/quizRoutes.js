@@ -91,7 +91,7 @@ router
         try{
             const { payload: result, error } = await quizService.createQuiz(req.body);
             if(error) {
-                res.status(400).json(error);
+                res.status(400).json("create error",error);
             } else {
                 res
                     .status(201)

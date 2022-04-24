@@ -165,12 +165,13 @@ async function verifyClassExists(req, res, next){
     * @type {UnitService}
     */
     const unitService = ServiceLocator.getService(UnitService.name);
-     req.body.unit_id = parseInt(req.params.id);
+    req.params.id && (req.body.unit_id = req.params.id);
      try{
          const { payload: result, error } = await unitService.getUnit(req.body);
  
          if(error) {
-             res.status(400).json("verifyUnitAccess caused: ",error);
+             console.log("Error in verifyUnitAccess");
+             res.status(400).json(error);
          } else {
             if(result.instructor_id == req.body.user_id) {
                 next();
