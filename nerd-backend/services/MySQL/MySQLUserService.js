@@ -123,8 +123,8 @@ class MySQLUserService extends UserService {
     async updateUser(userDTO) {
         const updateUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE user_table SET user_name=?, user_type=? WHERE user_id=?;",
-                values:[userDTO.user_name, userDTO.user_type, userDTO.user_id]
+                sql: "UPDATE user_table SET user_name=?, user_type=?, user_bio=? WHERE user_id=?;",
+                values:[userDTO.user_name, userDTO.user_type, userDTO.user_bio, userDTO.user_id]
             },
             (err, results) => {
                 

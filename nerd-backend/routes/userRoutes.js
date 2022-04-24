@@ -185,6 +185,10 @@ router
     *                   type: string
     *                   description: The user's type.
     *                   example: admin
+    *                 user_bio: 
+    *                   type: string
+    *                   description: The user's 'about me' for their profile.
+    *                   example: I am a student at California State University, Sacramento
     *       400:
     *         description: The user was not retrieved.
     *       401:
@@ -215,7 +219,8 @@ router
                             user_id:user.user_id,
                             user_email:user.user_email,
                             user_name:user.user_name,
-                            user_type:user.user_type
+                            user_type:user.user_type,
+                            user_bio: user.user_bio
                         }
                     );
             }
@@ -256,6 +261,8 @@ router
     *                 type: string
     *               user_type:
     *                 type: string
+    *               user_bio:
+    *                 type: string
     *     responses:
     *       200:
     *         description: The user was updated.
@@ -275,13 +282,13 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .put("/api/user/update/:id", AuthService.verifyToken, async(req, res) => {
+    .put("/api/user/update/:id", [AuthService.verifyToken], async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.user_id;
+        req.body.user_id = req.params.id;
         try{
             
             const { payload: message, error } = await userService.updateUser(req.body);

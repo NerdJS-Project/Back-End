@@ -87,6 +87,7 @@ router
          */
         const classService = ServiceLocator.getService(ClassService.name);
         req.body.class_id = req.id;
+        req.body.instructor_id = req.body.user_id;
         if(req.user_type != "instructor") {
                 res
                     .status(401)
@@ -155,7 +156,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
         /**
          * @type {ClassService}
          */
@@ -168,7 +169,7 @@ router
             }
         try{
             const { payload: newClass, error } = await classService.getClassById(req.body);
-            if(error) {
+            if(error) {    
                 res.status(400).json(error);
             } else {
                 req.body.class_name = newClass.class_name;
@@ -335,6 +336,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -361,9 +366,7 @@ router
                     .status(200)
                     .json(
                         {
-                            class_id:result.class_id,
-                            class_name:result.class_name,
-                            class_descrip:result.class_descrip
+                            result
                         }
                     );
             }
@@ -405,6 +408,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -476,6 +483,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
@@ -542,6 +553,10 @@ router
     *                 class_descrip:
     *                   type: string
     *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
     *       400:
     *         description: The class was not retrieved.
     *       401:
