@@ -255,6 +255,18 @@ function encrypt(req, res, next){
     });
 };
 
+function verifyEmailAndPassword(req, res, next){
+    if(req.body.user_email && req.body.user_password){
+        next();
+    }
+    else{
+        res.status(400).json({
+            error: "Email and password are required."
+        });
+    }
+};
+
+
 function verifyToken(req, res, next) {
     let token = req.headers["token"];
     if (!token) {
@@ -293,4 +305,5 @@ module.exports = {
     verifyUnitAccess : verifyUnitAccess,
     getClassByUserIdAndClassId : getClassByUserIdAndClassId,
     getClassInstructorId : getClassInstructorId,
+    verifyEmailAndPassword : verifyEmailAndPassword
 }

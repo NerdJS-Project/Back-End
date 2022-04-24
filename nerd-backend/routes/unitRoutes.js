@@ -362,7 +362,7 @@ router
     *     tags:
     *       - Unit
     *     summary: update a unit
-    *     description: update a unit by id. Update will affect unit content and content type. Both fields MUST be provided or any blank fields will be erased.
+    *     description: update a unit by id. Update will affect unit content and content type. Both fields MUST be provided or any blank fields will be erased. 
     *     parameters:
     *       - in: path
     *         name: id

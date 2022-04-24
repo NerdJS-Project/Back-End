@@ -320,6 +320,86 @@ router
 
     })
 
+        /**
+    * @swagger
+    * /user/changeAuth/{id}:
+    *   put:
+    *     tags:
+    *       - User
+    *     summary: Update a single user's credentials.
+    *     description: Update a user's email and password. The user's id is required to update the user. NOTE The user's email and password are required to update the user. Anyfield left blank will return an error.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: Numeric ID of the user to update.
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               user_email:
+    *                 type: string
+    *               user_password:
+    *                 type: string
+    *     responses:
+    *       200:
+    *         description: The user was updated.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: The user was not updated
+    *       401:
+    *         description: The user was not updated because the user is not authorized
+    *       403:
+    *         description: The user was not updated because no token was provided in header
+    *       500:
+    *         description: An internal error occured
+    */
+    .put("/api/user/changeAuth/:id", [AuthService.verifyEmailAndPassword, AuthService.verifyToken, AuthService.authenticate], async(req, res) => {
+
+        /**
+         * @type {UserService}
+         */
+        const userService = ServiceLocator.getService(UserService.name);
+        req.body.user_id = req.user_id;
+        try{
+            
+            const { payload: message, error } = await userService.updateAuth(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        {
+                            auth:req.auth,
+                            token:req.token,
+                            message: message
+                        }
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in userRoutes, put/user");
+            res.status(500).end();
+        }
+
+    })
+
    
 
     /**
