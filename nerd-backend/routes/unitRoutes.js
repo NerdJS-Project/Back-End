@@ -148,6 +148,8 @@ router
     *                   type: string
     *                 unit_content:
     *                   type: string
+    *                 unit_content_type:
+    *                   type: string
     *                 lesson_id:
     *                   type: integer
     *                 instructor_id:
@@ -217,6 +219,8 @@ router
     *                   type: string
     *                 unit_content:
     *                   type: string
+    *                 unit_content_type:
+    *                   type: string
     *                 lesson_id:
     *                   type: integer
     *                 instructor_id:
@@ -250,12 +254,7 @@ router
                 res
                     .status(200)
                     .json(
-                        {
-                            unit_id:unit.unit_id,
-                            unit_name:unit.unit_name,
-                            unit_content:unit.unit_content,
-                            lessson_id:unit.lesson_id
-                        }
+                        unit
                     );
             }
         }catch(e){
@@ -267,12 +266,12 @@ router
 
     /**
     * @swagger
-    * /unit/updateType/{id}:
+    * /unit/update/{id}:
     *   put:
     *     tags:
     *       - Unit
     *     summary: update a unit
-    *     description: update a unit by id
+    *     description: update a unit by id. Update affects unit name and index. Both fields MUST be provided or any blank fields will be erased.
     *     parameters:
     *       - in: path
     *         name: id
@@ -293,11 +292,7 @@ router
     *             properties:
     *               unit_name:
     *                 type: string
-    *               unit_content:
-    *                 type: string
-    *               lesson_id:
-    *                 type: integer
-    *               instructor_id:
+    *               unit_index:
     *                 type: integer
     *     responses:
     *       200:
@@ -332,7 +327,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .put("/api/unit/updateType/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .put("/api/unit/update/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
 
         /**
          * @type {unitService}
@@ -360,6 +355,96 @@ router
 
     })
 
+        /**
+    * @swagger
+    * /unit/updateUnitContent/{id}:
+    *   put:
+    *     tags:
+    *       - Unit
+    *     summary: update a unit
+    *     description: update a unit by id. Update will affect unit content and content type. Both fields MUST be provided or any blank fields will be erased.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         description: unit id
+    *         required: true
+    *         type: integer
+    *       - in: header
+    *         name: token
+    *         description: an authorization header
+    *         required: true
+    *         type: string
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               unit_content:
+    *                 type: string
+    *               unit_content_type:
+    *                type: string
+    *     responses:
+    *       200:
+    *         description: Successfully updated unit
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 error:
+    *                   type: string
+    *       401:
+    *         description: Unauthorized
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message:
+    *                   type: string
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+    .put("/api/unit/updateUnitContent/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
+
+        /**
+         * @type {unitService}
+         */
+        const unitService = ServiceLocator.getService(UnitService.name);
+        req.body.unit_id = req.params.id;
+        if(req.user_type != "instructor"){
+            res.status(401).json({message: "Can't Update: wrong user type "+ req.user_type});
+        }
+        try{
+            
+            const { payload: message, error } = await unitService.updateUnitContent(req.body);
+
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json({message: message});
+            }
+        }catch(e){
+            console.log("an error occured in unitRoutes, put/unit");
+            res.status(500).end();
+        }
+
+    })
     /**
     * @swagger
     * /unit/delete/{id}:
@@ -412,12 +497,15 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/unit/:id", AuthService.verifyToken, async(req, res) => {
+    .delete("/api/unit/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
 
         /**
          * @type {unitService}
          */
         const unitService = ServiceLocator.getService(UnitService.name);
+        if(req.user_type != "instructor"){
+            res.status(401).json({message: "Can't Update: wrong user type "+ req.user_type});
+        }
         req.body.unit_id = req.params.id;
         try{
             

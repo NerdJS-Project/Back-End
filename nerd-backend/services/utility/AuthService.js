@@ -167,7 +167,7 @@ async function verifyClassExists(req, res, next){
     const unitService = ServiceLocator.getService(UnitService.name);
 
      try{
-         const { payload: result, error } = await unitService.getUnitId(req.body);
+         const { payload: result, error } = await unitService.getUnit(req.body);
  
          if(error) {
              res.status(400).json(error);
