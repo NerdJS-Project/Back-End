@@ -165,11 +165,12 @@ async function verifyClassExists(req, res, next){
     * @type {UnitService}
     */
     const unitService = ServiceLocator.getService(UnitService.name);
-
+    req.params.id && (req.body.unit_id = req.params.id);
      try{
-         const { payload: result, error } = await unitService.getUnitId(req.body);
+         const { payload: result, error } = await unitService.getUnit(req.body);
  
          if(error) {
+             console.log("Error in verifyUnitAccess");
              res.status(400).json(error);
          } else {
             if(result.instructor_id == req.body.user_id) {
@@ -228,6 +229,8 @@ async function authenticate(req, res, next){
                     req.user_name=user.user_name;
                     req.user_type=user.user_type;
                     req.user_id=user.user_id;
+                    req.user_pp=user.user_pp;
+                    req.user_bio=user.user_bio;
                     req.token = jwt.sign({ id: user.user_id }, secret, {
                         expiresIn: 86400 // 24 hours
                     }); 
@@ -252,6 +255,18 @@ function encrypt(req, res, next){
         next();
     });
 };
+
+function verifyEmailAndPassword(req, res, next){
+    if(req.body.user_email && req.body.user_password){
+        next();
+    }
+    else{
+        res.status(400).json({
+            error: "Email and password are required."
+        });
+    }
+};
+
 
 function verifyToken(req, res, next) {
     let token = req.headers["token"];
@@ -291,4 +306,5 @@ module.exports = {
     verifyUnitAccess : verifyUnitAccess,
     getClassByUserIdAndClassId : getClassByUserIdAndClassId,
     getClassInstructorId : getClassInstructorId,
+    verifyEmailAndPassword : verifyEmailAndPassword
 }

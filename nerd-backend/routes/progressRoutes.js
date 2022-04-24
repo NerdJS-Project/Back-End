@@ -277,10 +277,10 @@ router
                     if(error) {
                         res.status(400).json("unit or user id "+error.message);
                     } else {
-                        AllUnits.map(unit => {
+                        AllUnits && AllUnits.map(unit => {
                             unit.completed=false;
                         })
-                        UserProgress.map(progress => {
+                        UserProgress && UserProgress.map(progress => {
                             AllUnits.map(unit => {
                                 if(unit.unit_id===progress.unit_id) {
                                     unit.completed=true;
@@ -378,10 +378,10 @@ router
                     if(error) {
                         res.status(400).json("unit or user id "+error.message);
                     } else {
-                        AllUnits.map(unit => {
+                        AllUnits && AllUnits.map(unit => {
                             unit.completed=false;
                         })
-                        UserProgress.map(progress => {
+                        UserProgress && UserProgress.map(progress => {
                             AllUnits.map(unit => {
                                 if(unit.unit_id===progress.unit_id) {
                                     unit.completed=true;
@@ -480,10 +480,10 @@ router
                     if(error) {
                         res.status(400).json("unit or user id "+error.message);
                     } else {
-                        AllUnits.map(unit => {
+                        AllUnits && AllUnits.map(unit => {
                             unit.completed=false;
                         })
-                        UserProgress.map(progress => {
+                        UserProgress && UserProgress.map(progress => {
                             AllUnits.map(unit => {
                                 if(unit.unit_id===progress.unit_id) {
                                     unit.completed=true;
