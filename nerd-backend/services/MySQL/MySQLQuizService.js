@@ -71,7 +71,7 @@ class MySQLQuizService extends QuizService {
      * @param {import("../QuizService").quizDTO} quizDTO
      * @returns {Promise<Result<boolean>} 
      */
-    async getquiz(quizDTO){
+    async getQuiz(quizDTO){
         /**
          * @type {Promise<import("../QuizService").quiz>}
          */
@@ -88,7 +88,7 @@ class MySQLQuizService extends QuizService {
                 if(!results || results.length === 0){
                     var err = new Error("User does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "quiz NOT FOUND";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -96,7 +96,7 @@ class MySQLQuizService extends QuizService {
         });
         try{
             const newQuiz = await getQuizCMD;
-            return new Result(newquiz, null);
+            return new Result(newQuiz, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));

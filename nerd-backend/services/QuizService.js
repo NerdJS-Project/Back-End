@@ -46,6 +46,11 @@
       */
      getQuiz(quizDTO){ }
  
+    /**
+     * @param {QuizDTO} quizDTO
+     * @returns {Promise<Result<Quiz>>} 
+     */
+    async getQuizByUnitId(quizDTO){ }
 
  };
  

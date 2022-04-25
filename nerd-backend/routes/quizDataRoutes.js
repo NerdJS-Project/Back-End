@@ -83,6 +83,7 @@ router
     *         description: An internal error occured.
     */
     .post("/api/quizdata/create", async(req, res) => {
+        
         /**
          * @type {QuizDataService}
          */
@@ -177,13 +178,7 @@ router
             } else {
                 res
                     .status(200)
-                    .json(
-                        {
-                            quiz_id:quizdata.quiz_id,
-                            quizdata_question:question.quizdata_question,
-							quizdata_answers:answers.quizdata_answers,
-                        }
-                    );
+                    .json(quizdata);
             }
         }catch(e){
             console.log("an error occured in quizdataRoutes, get/quizdata");
@@ -192,19 +187,96 @@ router
 
     })
    
+    
+    /**
+    * @swagger
+    * /quizdata/update/{id}:
+    *   put:
+    *     tags:
+    *       - Quiz Data
+    *     summary: update quizdata
+    *     description: update a quizdata's question and/or answers.
+    *     parameters:
+    *       - in: path
+    *         name: id
+    *         required: true
+    *         description: Quiz id of the quizdata to update
+    *         type: string 
+    *     requestBody:
+    *       required: true
+    *       content:
+    *         application/json:
+    *           schema:
+    *             type: object
+    *             properties:
+    *               quizdata_id:
+    *                 type: string
+    *               quizdata_question:
+    *                 type: text
+    *               quizdata_answers:
+    *                 type: json
+    *     responses:
+    *       200:
+    *         description: Successfully updated quizdata
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 message: 
+    *                   type: boolean
+    *       400:
+    *         description: Bad Request
+    *       401:
+    *         description: Unauthorized
+    *       403:
+    *         description: no token provided
+    *       500:
+    *         description: An internal error occured.
+    */
+     .put("/api/quizdata/update/:id", async(req, res) => {
+        console.log("0", req);
+        /**
+         * @type {QuizDataService}
+         */
+        const quizdataService = ServiceLocator.getService(QuizDataService.name);
+        console.log("1");
+        req.body.quiz_id = req.params.id;
+        try{
+            console.log("2");
+            const { payload: message, error } = await quizdataService.updateQuizData(req.body);
+            console.log("3");
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json({message: message});
+            }
+        }catch(e){
+            console.log("an error occured in quizDataRoutes, put/quizdata");
+            res.status(500).end();
+        }
+
+    })    
 
     /**
     * @swagger
-    * /quizdata/delete/{id}:
+    * /quizdata/delete/{id}/{did}:
     *   delete:
     *     tags:
     *       - Quiz Data
-    *     summary: Delete a quiz's data by id
+    *     summary: Delete a quiz's data by id of quiz and quizdata
     *     description: Delete a quiz's data by id
     *     parameters:
     *       - in: path
     *         name: id
-    *         description: the id of the quiz
+    *         description: the quiz id
+    *         required: true
+    *         type: integer
+    *       - in: path
+    *         name: did
+    *         description: the quizdata id
     *         required: true
     *         type: integer
     *       - in: header
@@ -245,13 +317,14 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/quizdata/:id", async(req, res) => {
+    .delete("/api/quizdata/delete/:id/:did", async(req, res) => {
 
         /**
          * @type {quizDataService}
          */
         const quizDataService = ServiceLocator.getService(QuizDataService.name);
         req.body.quiz_id = req.params.id;
+        req.body.quizdata_id = req.params.did;
         try{
             
             const { payload: message, error } = await quizDataService.deleteQuizData(req.body);
