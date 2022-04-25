@@ -235,17 +235,13 @@ router
     *         description: An internal error occured.
     */
      .put("/api/quizdata/update/:id", async(req, res) => {
-        console.log("0", req);
         /**
          * @type {QuizDataService}
          */
         const quizdataService = ServiceLocator.getService(QuizDataService.name);
-        console.log("1");
         req.body.quiz_id = req.params.id;
         try{
-            console.log("2");
             const { payload: message, error } = await quizdataService.updateQuizData(req.body);
-            console.log("3");
             if(error) {
                 res.status(400).json(error);
             } else {
