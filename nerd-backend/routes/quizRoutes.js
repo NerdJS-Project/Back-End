@@ -227,12 +227,12 @@ router
     *                   type: string
     *                   example: "a2c77990-6baa-4fee-bc5a-0396dbd791d4"
     *       400:
-    *         description: The module was not retrieved.
+    *         description: The quiz was not retrieved.
     *       500:
     *         description: An internal error occured.
     */
     .get("/api/quiz/findByUnitId/:id", async(req, res) => {
-
+        
         /**
          * @type {QuizService}
          */
@@ -243,7 +243,8 @@ router
             const { payload: quizzes, error } = await quizService.getQuizByUnitId(req.body);
 
             if(error) {
-                res.status(400).json(error);
+                console.log(error);
+                res.status(400).json('as');
             } else {
                 res
                     .status(200)
