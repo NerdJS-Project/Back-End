@@ -34,7 +34,12 @@
       */
      deleteQuizData(quiz_id) { }
 
-
+     /**
+      * @param {QuizDataDTO} quizdataDTO
+      * @returns {Promise<Result<QuizData>>}
+      */
+     updateQuizData(quizdataDTO) { }
+ 
      /**
       * @param {QuizDataDTO} quizdataDTO
       * @returns {Promise<Result<quiz>>}
