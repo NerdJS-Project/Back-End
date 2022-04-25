@@ -715,7 +715,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyClassInstructor], async(req, res) => {
 
         /**
          * @type {ClassService}
@@ -749,76 +749,77 @@ router
 
     })
 
-    /**
-    * @swagger
-    * /class/drop/{id}:
-    *   delete:
-    *     tags:
-    *       - Class
-    *     summary: drop a single class.
-    *     description: drop a single class by student, by sending the class id in url and auth token.
-    *     parameters:
-    *       - in: path
-    *         name: id
-    *         required: true
-    *         description: UUID of the class to be dropped.
-    *         type: integer
-    *       - in: header
-    *         name: token
-    *         description: an authorization header
-    *         required: true
-    *         type: string
-    *     responses:
-    *       200:
-    *         description: The class was dropped.
-    *         content:
-    *           application/json:
-    *             schema:
-    *               type: object
-    *               properties:
-    *                 message: 
-    *                   type: boolean
-    *       400:
-    *         description: The class was not dropped from the database
-    *       401:
-    *         description: The class was not dropped because the user is not authorized
-    *       403:
-    *         description: The class was not dropped because no token was provided in header
-    *       500:
-    *         description: An internal error occured
-    */
-    .delete("/api/class/drop/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    //DANGER: This route has unintended consequences. Do NOT use this route unless you know what you are doing.
+    // /**
+    // * @swagger
+    // * /class/drop/{id}:
+    // *   delete:
+    // *     tags:
+    // *       - Class
+    // *     summary: drop a single class.
+    // *     description: drop a single class by student, by sending the class id in url and auth token.
+    // *     parameters:
+    // *       - in: path
+    // *         name: id
+    // *         required: true
+    // *         description: UUID of the class to be dropped.
+    // *         type: integer
+    // *       - in: header
+    // *         name: token
+    // *         description: an authorization header
+    // *         required: true
+    // *         type: string
+    // *     responses:
+    // *       200:
+    // *         description: The class was dropped.
+    // *         content:
+    // *           application/json:
+    // *             schema:
+    // *               type: object
+    // *               properties:
+    // *                 message: 
+    // *                   type: boolean
+    // *       400:
+    // *         description: The class was not dropped from the database
+    // *       401:
+    // *         description: The class was not dropped because the user is not authorized
+    // *       403:
+    // *         description: The class was not dropped because no token was provided in header
+    // *       500:
+    // *         description: An internal error occured
+    // */
+    // .delete("/api/class/drop/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
 
-        /**
-         * @type {ClassService}
-         */
-        const classService = ServiceLocator.getService(ClassService.name);
-        if(req.user_type != "student") {
-                res
-                    .status(201)
-                    .json({message: "unauthorized user type"});
-            }
-        req.body.class_id = req.params.id;
-        try{
+    //     /**
+    //      * @type {ClassService}
+    //      */
+    //     const classService = ServiceLocator.getService(ClassService.name);
+    //     if(req.user_type != "student") {
+    //             res
+    //                 .status(201)
+    //                 .json({message: "unauthorized user type"});
+    //         }
+    //     req.body.class_id = req.params.id;
+    //     try{
             
-            const { payload: message, error } = await classService.dropClass(req.body);
+    //         const { payload: message, error } = await classService.dropClass(req.body);
 
-            if(error) {
-                res.status(400).json(error);
-            } else {
-                res
-                    .status(200)
-                    .json(
-                        {
-                            message: message
-                        }
-                    );
-            }
-        }catch(e){
-            console.log("an error occured in classRoutes, delete/class");
-            res.status(500).end();
-        }
+    //         if(error) {
+    //             res.status(400).json(error);
+    //         } else {
+    //             res
+    //                 .status(200)
+    //                 .json(
+    //                     {
+    //                         message: message
+    //                     }
+    //                 );
+    //         }
+    //     }catch(e){
+    //         console.log("an error occured in classRoutes, delete/class");
+    //         res.status(500).end();
+    //     }
 
-    });
+    // });
 
 module.exports = router;
