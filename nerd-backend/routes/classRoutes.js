@@ -715,7 +715,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyClassInstructor], async(req, res) => {
 
         /**
          * @type {ClassService}
@@ -749,6 +749,7 @@ router
 
     })
 
+    //DANGER: This route has unintended consequences. Do NOT use this route unless you know what you are doing.
     /**
     * @swagger
     * /class/drop/{id}:

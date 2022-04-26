@@ -16,6 +16,7 @@ async function verifyClassInstructor(req, res, next){
     * @type {ClassService}
     */
     const classService = ServiceLocator.getService(ClassService.name);
+    req.params.id && (req.body.class_id = req.params.id);
     try{
         const { payload: result, error } = await classService.getInstructorId(req.body);
 
@@ -43,6 +44,7 @@ async function getClassInstructorId(req, res, next){
     * @type {ClassService}
     */
     const classService = ServiceLocator.getService(ClassService.name);
+    
     try{
         const { payload: result, error } = await classService.getInstructorId(req.params);
         

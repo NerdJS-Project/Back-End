@@ -73,13 +73,12 @@ class MySQLClassService extends ClassService {
      * @param {import("../ClassService").ClassDTO} classDTO
      */
     async getInstructorId(classDTO){
-        console.log("getInstructorId: ", classDTO);
         /**
          * @type {Promise<import("../ClassService").Class>}
          */
         const getInstructorIdCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT c.user_class as instructor_id from user_table u, classes c where c.class_id=? and u.user_id=c.user_class and u.user_type='instructor';",
+                sql:"SELECT instructor_id FROM classes WHERE class_id=?;",
                 values: [classDTO.class_id]
             }, (err, results) => {
                 
@@ -101,6 +100,7 @@ class MySQLClassService extends ClassService {
             return new Result(id, null);
 
         } catch(e) {
+            console.log(e);
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
     }
@@ -428,7 +428,7 @@ class MySQLClassService extends ClassService {
         }
            
     }
-
+//sql: "DELETE c, m FROM classes c, modules m JOIN c m ON c.class_id=m.class_id WHERE class_id=?;",
      /**
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<boolean>>}
@@ -436,8 +436,8 @@ class MySQLClassService extends ClassService {
     async deleteClass(classDTO) {
         const deleteClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM classes WHERE (select user_type from user_table where user_id=?)='instructor' and class_id=?;",
-                values:[classDTO.user_id, classDTO.class_id]
+                sql: "DELETE c, m FROM classes c JOIN modules m ON c.class_id=m.class_id WHERE c.class_id=?;",
+                values:[classDTO.class_id]
             },
             (err, results) => {
                 
@@ -454,7 +454,7 @@ class MySQLClassService extends ClassService {
             else return new Result(false, null);
 
         } catch(e) {
-			console.log(e.code, e.errno);
+			console.log("delete class",e.code, e.errno);
 
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
@@ -468,8 +468,8 @@ class MySQLClassService extends ClassService {
     async dropClass(classDTO) {
         const dropClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM classes WHERE (select user_type from user_table where user_id=?)='student' and user_class=? and class_id=?;",
-                values:[classDTO.user_id, classDTO.user_id, classDTO.class_id]
+                sql: "DELETE FROM classes WHERE user_class=? and class_id=?;",
+                values:[classDTO.user_id, classDTO.class_id]
             },
             (err, results) => {
                 
