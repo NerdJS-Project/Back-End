@@ -317,6 +317,7 @@ router
                     .status(200)
                     .json({message: message});
             }
+            
         }catch(e){
             console.log("an error occured in userRoutes, put/user");
             res.status(500).end();
