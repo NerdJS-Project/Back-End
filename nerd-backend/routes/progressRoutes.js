@@ -6,6 +6,7 @@ const AuthService = require("../services/utility/AuthService");
 const ProgressService = require("../services/ProgressService");
 const LessonService = require("../services/LessonService");
 const UnitService = require("../services/UnitService");
+const ClassService = require("../services/ClassService");
 
 const utcStr = new Date().toUTCString();
 //progress routes
@@ -37,8 +38,6 @@ router
     *             type: object
     *             properties:
     *               unit_id:
-    *                 type: integer
-    *               instructor_id:
     *                 type: integer
     *     responses:
     *       201:
@@ -101,21 +100,37 @@ router
                 req.body.class_id=viewResult.class_id;
                 req.body.module_id=viewResult.module_id;
                 req.body.lesson_id=viewResult.lesson_id;
+
+                const classService = ServiceLocator.getService(ClassService.name);
+    
                 try{
-                    const { payload: result, error } = await progressService.createProgress(req.body);
+                    const { payload: result, error } = await classService.getInstructorId(req.body);
+                    
                     if(error) {
-                        res.status(400).json("create progress broke..."+error.message);
+                        res.status(400).json(error);
                     } else {
-                        res
-                            .status(201)
-                            .json({
-                                result
-                            });
+                        req.body.instructor_id = result.instructor_id;
+                        try{
+                            const { payload: result, error } = await progressService.createProgress(req.body);
+                            if(error) {
+                                res.status(400).json("create progress broke..."+error.message);
+                            } else {
+                                res
+                                    .status(201)
+                                    .json({
+                                        result
+                                    });
+                            }
+                        } catch(e) {
+                            console.log("an error occured in createProgress");
+                            res.status(500).end();
+                        }
                     }
-                } catch(e) {
-                    console.log("an error occured in createProgress");
+                }catch(e){
+                    console.log("an error occured in getClassInstructorId");
                     res.status(500).end();
                 }
+                
 
             }
         }catch(e){
