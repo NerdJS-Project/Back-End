@@ -45,9 +45,8 @@ create table modules
 	module_name VARCHAR(40) NOT NULL,
 	module_descrip VARCHAR(100),
 	instructor_id BIGINT UNSIGNED NOT NULL,
-	class_id CHAR(36) NOT NULL,
-	FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
-	FOREIGN KEY (class_id) REFERENCES classes(class_id) ON DELETE CASCADE
+	class_id CHAR(36) REFERENCES classes(class_id),
+	FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 ); 
 create table lessons
 (
@@ -65,8 +64,8 @@ create table units
 	unit_id SERIAL PRIMARY KEY,
 	unit_index INT,
 	unit_name VARCHAR(30),
-	unit_content_type VARCHAR(65535),
-	unit_content VARCHAR(65535),
+	unit_content_type TEXT(65535),
+	unit_content TEXT(65535),
 	lesson_id BIGINT UNSIGNED NOT NULL,
 	instructor_id BIGINT UNSIGNED NOT NULL,
 	FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE,
