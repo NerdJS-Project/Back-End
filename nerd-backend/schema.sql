@@ -1,24 +1,24 @@
 Create database if not exists nerdjs;
 use nerdjs;
 
-drop table progress;
-drop table scores;
-drop table quizdata;
-drop table quizzes;
-drop table units; 
-drop table lessons;
-drop table modules;
-drop table classes;
-drop table user_table;
-drop view class_units;
-drop view module_units;
-drop view progression_creation;
+drop table if exists progress;
+drop table if exists scores;
+drop table if exists quizdata;
+drop table if exists quizzes;
+drop table if exists units; 
+drop table if exists lessons;
+drop table if exists modules;
+drop table if exists classes;
+drop table if exists user_table;
+drop view if exists class_units;
+drop view if exists module_units;
+drop view if exists progression_creation;
 
 
 create table user_table 
 (
     user_id SERIAL PRIMARY KEY,
-    user_name VARCHAR(30) NOT NULL,
+    user_name VARCHAR(50) NOT NULL,
     user_email VARCHAR(50),
     user_pp MEDIUMBLOB,
     user_bio TEXT,
@@ -30,8 +30,8 @@ create table classes
 (
     class_id CHAR(36) NOT NULL,
     user_class BIGINT UNSIGNED NOT NULL,
-    class_name VARCHAR(40) NOT NULL,
-    class_descrip VARCHAR(100),
+    class_name VARCHAR(100) NOT NULL,
+    class_descrip VARCHAR(250),
     instructor_id BIGINT UNSIGNED NOT NULL,
     FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
     FOREIGN KEY (user_class) REFERENCES user_table(user_id),
@@ -41,18 +41,17 @@ create table classes
 create table modules
 (
 	module_id SERIAL PRIMARY KEY,
-	module_name VARCHAR(40) NOT NULL,
-	module_descrip VARCHAR(100),
+	module_name VARCHAR(100) NOT NULL,
+	module_descrip VARCHAR(250),
 	instructor_id BIGINT UNSIGNED NOT NULL,
-	class_id CHAR(36) NOT NULL,
-	FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
-	FOREIGN KEY (class_id) REFERENCES classes(class_id) ON DELETE CASCADE
+	class_id CHAR(36) REFERENCES classes(class_id),
+	FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE
 ); 
 create table lessons
 (
 	lesson_id SERIAL PRIMARY KEY,
-	lesson_name VARCHAR(30),
-	lesson_descrip VARCHAR(100),
+	lesson_name VARCHAR(100),
+	lesson_descrip VARCHAR(250),
 	lesson_index INT,
 	instructor_id BIGINT UNSIGNED NOT NULL,
 	module_id BIGINT UNSIGNED NOT NULL,
@@ -63,9 +62,9 @@ create table units
 (
 	unit_id SERIAL PRIMARY KEY,
 	unit_index INT,
-	unit_name VARCHAR(30),
-	unit_content_type VARCHAR(65535),
-	unit_content VARCHAR(65535),
+	unit_name VARCHAR(100),
+	unit_content_type TEXT(65535),
+	unit_content TEXT(65535),
 	lesson_id BIGINT UNSIGNED NOT NULL,
 	instructor_id BIGINT UNSIGNED NOT NULL,
 	FOREIGN KEY (lesson_id) REFERENCES lessons(lesson_id) ON DELETE CASCADE,
@@ -74,7 +73,7 @@ create table units
 create table quizzes
 (
 	quiz_id SERIAL PRIMARY KEY,
-	quiz_name VARCHAR(50),
+	quiz_name VARCHAR(100),
 	instructor_id BIGINT UNSIGNED NOT NULL,
 	unit_id BIGINT UNSIGNED NOT NULL,
 	FOREIGN KEY (instructor_id) REFERENCES user_table(user_id) ON DELETE CASCADE,
@@ -85,7 +84,7 @@ create table quizdata
 (
 	quizdata_id SERIAL PRIMARY KEY,
 	quizdata_question TEXT,
-	quizdata_answers JSON,
+	quizdata_answers VARCHAR(50000),
 	quiz_id BIGINT UNSIGNED NOT NULL,
 	FOREIGN KEY (quiz_id) REFERENCES quizzes(quiz_id) ON DELETE CASCADE
 );

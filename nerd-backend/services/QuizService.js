@@ -1,23 +1,17 @@
 /**
  * @typedef {Object} Quiz
  * @property {number} quiz_id
- * @property {number} quiz_index
  * @property {string} quiz_name
- * @property {string} quiz_type
- * @property {string} quiz_content
- * @property {string} quiz_answers
  * @property {number} unit_id
+ * @property {number} instructor_id
  */
 
 /**
  * @typedef {Object} QuizDTO
  * @property {number} quiz_id
- * @property {number} quiz_index
  * @property {string} quiz_name
- * @property {string} quiz_type
- * @property {string} quiz_content
- * @property {string} quiz_answers
  * @property {number} unit_id
+ * @property {number} instructor_id
  */
 
  const BaseService = require("./utility/BaseService");
@@ -52,6 +46,11 @@
       */
      getQuiz(quizDTO){ }
  
+    /**
+     * @param {QuizDTO} quizDTO
+     * @returns {Promise<Result<Quiz>>} 
+     */
+    async getQuizByUnitId(quizDTO){ }
 
  };
  

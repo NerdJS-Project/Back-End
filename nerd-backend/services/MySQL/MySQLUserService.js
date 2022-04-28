@@ -22,8 +22,8 @@ class MySQLUserService extends UserService {
     async createUser(userDTO) {
         const createUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO user_table (user_name, user_email, user_password, user_type) VALUES(?,?,?,?);",
-                values:[userDTO.user_name, userDTO.user_email, userDTO.user_password, userDTO.user_type]
+                sql: "INSERT INTO user_table (user_name, user_email,user_bio, user_pp, user_password, user_type) VALUES(?,?,?,?,?,?);",
+                values:[userDTO.user_name, userDTO.user_email, userDTO.user_bio, userDTO.user_pp, userDTO.user_password, userDTO.user_type]
             },
             (err, results) => {
                 if(err) {
@@ -123,8 +123,8 @@ class MySQLUserService extends UserService {
     async updateUser(userDTO) {
         const updateUserCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE user_table SET user_name=?, user_type=?, user_bio=? WHERE user_id=?;",
-                values:[userDTO.user_name, userDTO.user_type, userDTO.user_bio, userDTO.user_id]
+                sql: "UPDATE user_table SET user_name=?, user_type=?, user_bio=?, user_pp=? WHERE user_id=?;",
+                values:[userDTO.user_name, userDTO.user_type, userDTO.user_bio, userDTO.user_pp, userDTO.user_id]
             },
             (err, results) => {
                 
@@ -143,6 +143,31 @@ class MySQLUserService extends UserService {
         }
            
     }
+    /* Alex updated */
+    async updateAuth(userDTO) {
+        const updateAuthCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "UPDATE user_table SET user_email=?, user_password=? WHERE user_id=?;",
+                values:[userDTO.user_email, userDTO.user_password, userDTO.user_id]
+            },
+            (err, results) => {
+                
+                if(err) {
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const results = await updateAuthCMD;
+            if(results.affectedRows>0) return new Result(true, null);
+            else return new Result(false, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+           
+    }
+
 
      /**
      * @param {import("../UserService").UserDTO} userDTO

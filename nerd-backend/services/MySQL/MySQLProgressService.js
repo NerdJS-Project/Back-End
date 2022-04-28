@@ -21,7 +21,7 @@ class MySQLProgressService extends ProgressService {
     async createProgress(progressDTO) {
         const createProgressCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO progress (user_id, unit_id, instructor_id, class_id, module_id, lesson_id, completed) VALUES(?,?,?,?,?,?,?);",
+                sql: "INSERT INTO progress (user_id, unit_id, instructor_id, class_id, module_id, lesson_id, completed) VALUES(?,?,?,?,?,?,1);",
                 values:[progressDTO.user_id, progressDTO.unit_id, progressDTO.instructor_id, progressDTO.class_id, progressDTO.module_id, progressDTO.lesson_id, progressDTO.completed]
             },
             (err, results) => {

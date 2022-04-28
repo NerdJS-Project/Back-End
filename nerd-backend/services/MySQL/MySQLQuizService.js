@@ -22,8 +22,8 @@ class MySQLQuizService extends QuizService {
     async createQuiz(quizDTO) {
         const createQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "INSERT INTO quizzes (quiz_index, quiz_name, quiz_type, quiz_content, quiz_answers, unit_id, instructor_id) VALUES(?,?,?,?,?,?,?);",
-                values:[quizDTO.quiz_index, quizDTO.quiz_name, quizDTO.quiz_type, quizDTO.quiz_content, quizDTO.quiz_answers, quizDTO.unit_id, quizDTO.instructor_id]
+                sql: "INSERT INTO quizzes (quiz_name, unit_id, instructor_id) VALUES(?,?,?);",
+                values:[quizDTO.quiz_name, quizDTO.unit_id, quizDTO.instructor_id]
             },
             (err, results) => {
                 if(err) {
@@ -71,13 +71,13 @@ class MySQLQuizService extends QuizService {
      * @param {import("../QuizService").quizDTO} quizDTO
      * @returns {Promise<Result<boolean>} 
      */
-    async getquiz(quizDTO){
+    async getQuiz(quizDTO){
         /**
          * @type {Promise<import("../QuizService").quiz>}
          */
         const getQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT * FROM Quizs WHERE quiz_id=?;",
+                sql:"SELECT * FROM quizzes WHERE quiz_id=?;",
                 values: [quizDTO.quiz_id]
             }, (err, results) => {
                 
@@ -88,7 +88,7 @@ class MySQLQuizService extends QuizService {
                 if(!results || results.length === 0){
                     var err = new Error("User does not exist!");
                     err.errno = 1404;
-                    err.code = "NOT FOUND";
+                    err.code = "quiz NOT FOUND";
                     return reject(err);
                 }
                 resolve(results[0]);
@@ -96,21 +96,59 @@ class MySQLQuizService extends QuizService {
         });
         try{
             const newQuiz = await getQuizCMD;
-            return new Result(newquiz, null);
+            return new Result(newQuiz, null);
 
         } catch(e) {
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
     }
-/*   "Update may require different parameters to update properly"
+
     /**
      * @param {import("../QuizService").quizDTO} quizDTO
      * @returns {Promise<Result<boolean>} 
-     *//*
+     */
+         async getQuizByUnitId(quizDTO){
+            /**
+             * @type {Promise<import("../QuizService").quiz>}
+             */
+            const getQuizByUnitIdCMD = new Promise((resolve, reject) => {
+                this.connection.query({
+                    sql:"SELECT * FROM quizzes WHERE unit_id=?;",
+                    values: [quizDTO.unit_id]
+                }, (err, results) => {
+                    
+                    if(err){
+                        return reject(err);
+                    }
+                    
+                    if(!results || results.length === 0){
+                        var err = new Error("User does not exist!");
+                        err.errno = 1404;
+                        err.code = "quiz NOT FOUND";
+                        return reject(err);
+                    }
+                    resolve(results);
+                });
+            });
+            try{
+                const newQuiz = await getQuizByUnitIdCMD;
+                return new Result(newQuiz, null);
+
+            } catch(e) {
+
+                return new Result(null, new IError(e.code, e.sqlMessage));
+            }
+        }
+    
+   
+    /**
+     * @param {import("../QuizService").quizDTO} quizDTO
+     * @returns {Promise<Result<boolean>} 
+     */
     async updateQuiz(quizDTO) {
         const updateQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "UPDATE Quizs SET quiz_name=? WHERE quiz_id=?;",
+                sql: "UPDATE Quizzes SET quiz_name=? WHERE quiz_id=?;",
                 values:[quizDTO.quiz_name, quizDTO.quiz_id]
             },
             (err, results) => {
@@ -131,7 +169,7 @@ class MySQLQuizService extends QuizService {
         }
            
     }
-*/
+
     /**
      * @param {import("../QuizService").quizDTO} quizDTO
      * @returns {Promise<Result<boolean>} 
@@ -139,7 +177,7 @@ class MySQLQuizService extends QuizService {
     async deleteQuiz(quizDTO) {
         const deleteQuizCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql: "DELETE FROM Quizs WHERE quiz_id=?;",
+                sql: "DELETE FROM quizzes WHERE quiz_id=?;",
                 values:[quizDTO.quiz_id]
             },
             (err, results) => {

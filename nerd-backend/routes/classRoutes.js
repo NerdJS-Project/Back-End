@@ -120,7 +120,7 @@ router
 
     /**
     * @swagger
-    * /class/signup/{id}:
+    * /class/signup/{class_id}:
     *   post:
     *     tags:
     *       - Class
@@ -133,7 +133,7 @@ router
     *         required: true
     *         type: string
     *       - in: path
-    *         name: id
+    *         name: class_id
     *         description: class id
     *         required: true
     *         type: string
@@ -156,12 +156,12 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .post("/api/class/signup/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
+    .post("/api/class/signup/:class_id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.getClassInstructorId], async(req, res) => {
         /**
          * @type {ClassService}
          */
         const classService = ServiceLocator.getService(ClassService.name);
-        req.body.class_id = req.params.id;
+        req.body.class_id = req.params.class_id;
         if(req.user_type != "student") {
                 res
                     .status(201)
@@ -262,14 +262,22 @@ router
                 end_result = []
                 try{
                     r.forEach(function(item, index) {
-                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)
+                        var end_result_index = end_result.findIndex(e => e.module_id === item.module_id)     
                         if(end_result_index!==-1) {
-                            end_result[end_result_index].lessons.push({
-                                lesson_id: item.lesson_id,
-                                lesson_name: item.lesson_name,
-                                lesson_descrip: item.lesson_descrip,
-                                lesson_index: item.lesson_index
+                            dups = false;
+                            end_result[end_result_index].lessons.forEach((e) => {
+                                if(e.lesson_id === item.lesson_id) {
+                                    dups = true;
+                                }
                             })
+                            if(!dups){
+                                end_result[end_result_index].lessons.push({
+                                    lesson_id: item.lesson_id,
+                                    lesson_name: item.lesson_name,
+                                    lesson_descrip: item.lesson_descrip,
+                                    lesson_index: item.lesson_index
+                                })
+                            }
                         } else {
                             sub_obj = {
                                 module_id: item.module_id,
@@ -299,7 +307,7 @@ router
                     );
             }
         }catch(e){
-            console.log("an error occured in userRoutes,/api/class/modulesAndLessons/:id ");
+            console.log("an error occured in classRoutes,/api/class/modulesAndLessons/:id ");
             res.status(500).end();
         }
 
@@ -707,7 +715,7 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .delete("/api/class/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyClassInstructor], async(req, res) => {
 
         /**
          * @type {ClassService}
@@ -741,6 +749,7 @@ router
 
     })
 
+    //DANGER: This route has unintended consequences. Do NOT use this route unless you know what you are doing.
     /**
     * @swagger
     * /class/drop/{id}:
