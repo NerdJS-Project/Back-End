@@ -374,13 +374,12 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .put("/api/user/changeAuth/:id", [AuthService.verifyEmailAndPassword, AuthService.verifyToken, AuthService.authenticate], async(req, res) => {
+    .put("/api/user/changeAuth/:id", [AuthService.verifyEmailAndPassword, AuthService.verifyToken, AuthService.encrypt], async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.user_id;
         try{
             
             const { payload: message, error } = await userService.updateAuth(req.body);
