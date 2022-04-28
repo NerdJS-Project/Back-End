@@ -288,13 +288,13 @@ router
     *       500:
     *         description: An internal error occured
     */
-    .put("/api/user/update/:id", AuthService.verifyToken, async(req, res) => {
+    .put("/api/user/update/:id", [AuthService.verifyToken], async(req, res) => {
 
         /**
          * @type {UserService}
          */
         const userService = ServiceLocator.getService(UserService.name);
-        req.body.user_id = req.user_id;
+        req.body.user_id = req.params.id;
         try{
             
             const { payload: message, error } = await userService.updateUser(req.body);
