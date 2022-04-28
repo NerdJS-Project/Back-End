@@ -195,15 +195,10 @@ router
     *                   type: string
     *                   description: The user's type.
     *                   example: admin
-    *                 user_bio: 
+    *                 user_pp:
     *                   type: string
-    *                   description: The user's 'about me' for their profile.
-    *                   example: I am a student at California State University, Sacramento
-    *                 user_pp: 
+    *                 user_bio:
     *                   type: string
-    *                   description: The user's choice of profile picture to represent themselves.
-    *               
-    *   
     *       400:
     *         description: The user was not retrieved.
     *       401:
