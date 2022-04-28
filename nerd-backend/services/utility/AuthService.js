@@ -260,7 +260,7 @@ function encrypt(req, res, next){
 
 function verifyEmailAndPassword(req, res, next){
     if(req.body.user_email && req.body.user_password){
-        next();
+        next()
     }
     else{
         res.status(400).json({
