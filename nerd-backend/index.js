@@ -34,7 +34,7 @@ app.use(require(`./routes/unitRoutes`));
 app.use(require(`./routes/lessonRoutes`));
 app.use(require(`./routes/quizRoutes`));
 app.use(require(`./routes/scoreRoutes`));
-app.use(require(`./routes/quizdataRoutes`));
+app.use(require(`./routes/quizDataRoutes`));
 app.use(require(`./routes/progressRoutes`));
 
 const swaggerJSDoc = require('swagger-jsdoc');
