@@ -98,6 +98,12 @@
     **/
     async getInstructorId(classDTO) { }
 
+    /**
+     * @param {ClassDTO} classDTO
+     * @returns {Promise<Result<boolean>>}
+     * */
+    async deleteClass(classDTO) { }
+
  };
  
  module.exports = ClassService

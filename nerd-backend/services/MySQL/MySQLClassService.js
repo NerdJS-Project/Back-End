@@ -428,7 +428,7 @@ class MySQLClassService extends ClassService {
         }
            
     }
-//sql: "DELETE c, m FROM classes c, modules m JOIN c m ON c.class_id=m.class_id WHERE class_id=?;",
+
      /**
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<boolean>>}
