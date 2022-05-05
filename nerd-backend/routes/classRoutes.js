@@ -435,9 +435,8 @@ router
          * @type {ClassService}
          */
         const classService = ServiceLocator.getService(ClassService.name);
-        req.body.class_name = req.params.name;
+        req.body.class_name = '%' + req.params.name + '%';
         try{
-            
             const { payload: result, error } = await classService.getClassByName(req.body);
             if(error) {
                 res.status(400).json(error);

@@ -339,7 +339,7 @@ router
         }
         try{
             
-            const { payload: message, error } = await unitService.updateUnitType(req.body);
+            const { payload: message, error } = await unitService.updateUnit(req.body);
 
             if(error) {
                 res.status(400).json(error);

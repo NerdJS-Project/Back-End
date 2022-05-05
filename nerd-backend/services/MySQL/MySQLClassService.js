@@ -188,14 +188,12 @@ class MySQLClassService extends ClassService {
          */
         const getClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT class_name, class_id, class_descrip, user_id, user_name as instructor_name from classes, user_table where classes.user_class = user_table.user_id and user_type='instructor' and class_name=?;",
+                sql:"SELECT class_name, class_id, class_descrip, user_id, user_name as instructor_name from classes, user_table where classes.user_class = user_table.user_id and class_name like ?;",
                 values: [classDTO.class_name]
             }, (err, results) => {
-                
                 if(err){
                     return reject(err);
                 }
-
                 if(!results || results.length === 0){
                     var err = new Error("Class does not exist!");
                     err.errno = 1404;
