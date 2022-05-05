@@ -36,6 +36,7 @@ app.use(require(`./routes/quizRoutes`));
 app.use(require(`./routes/scoreRoutes`));
 app.use(require(`./routes/quizDataRoutes`));
 app.use(require(`./routes/progressRoutes`));
+app.use(require(`./routes/adminRoutes`));
 
 const swaggerJSDoc = require('swagger-jsdoc');
 
@@ -130,6 +131,7 @@ const databaseSetup = async () => {
         console.log("QuizDataService initialized");
         console.log("ProgressService initialized");
         console.log("ScoreService initialized");
+        console.log("Admin Routes initialized");
         console.log("Database set up complete");
     } catch(e){
         console.log(e);
