@@ -339,7 +339,7 @@ router
         }
         try{
             
-            const { payload: message, error } = await unitService.updateUnitType(req.body);
+            const { payload: message, error } = await unitService.updateUnit(req.body);
 
             if(error) {
                 res.status(400).json(error);
@@ -496,7 +496,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/unit/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
+    .delete("/api/unit/delete/:id", [AuthService.verifyToken, AuthService.verifyUserType, AuthService.verifyUnitAccess], async(req, res) => {
 
         /**
          * @type {unitService}
