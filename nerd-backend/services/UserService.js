@@ -4,7 +4,10 @@
  * @property {string} user_name
  * @property {string} user_email
  * @property {string} user_bio
+<<<<<<< HEAD
+=======
 
+>>>>>>> 4f60e766253573e6010f2cba87f187f92804f1c5
  * @property {Blob} user_pp
  * @property {string} user_password
  * @property {string} user_type

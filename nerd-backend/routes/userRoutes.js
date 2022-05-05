@@ -225,7 +225,13 @@ router
                 res
                     .status(200)
                     .json(
-                        user
+                        {
+                            user_id:user.user_id,
+                            user_email:user.user_email,
+                            user_name:user.user_name,
+                            user_type:user.user_type,
+                            user_bio: user.user_bio
+                        }
                     );
             }
         }catch(e){
@@ -306,6 +312,7 @@ router
                     .status(200)
                     .json({message: message});
             }
+            
         }catch(e){
             console.log("an error occured in userRoutes, put/user");
             res.status(500).end();
