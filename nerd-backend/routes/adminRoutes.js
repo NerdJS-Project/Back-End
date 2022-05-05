@@ -109,7 +109,7 @@ router
             res.status(500).end();
         }
 
-    });
+    })
 
         /**
     * @swagger
