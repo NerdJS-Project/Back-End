@@ -20,7 +20,6 @@ class MySQLQuizDataService extends QuizDataService {
      * @returns {Promise<Result<import("../QuizDataService").QuizData>>} 
      */
     async createQuizData(quizdataDTO) {
-        console.log(quizdataDTO);
         const createQuizDataCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "INSERT INTO quizdata (quiz_id, quizdata_question, quizdata_answers) VALUES(?,?,?);",
@@ -109,7 +108,6 @@ class MySQLQuizDataService extends QuizDataService {
      * @returns {Promise<Result<boolean>>} 
      */
         async updateQuizData(quizdataDTO) {
-            console.log(quizdataDTO);
            const updateQuizDataCMD = new Promise((resolve, reject) => {
                this.connection.query({
                    sql: "UPDATE quizdata SET quizdata_question=?, quizdata_answers=? WHERE quiz_id=? and quizdata_id=?;",
@@ -159,8 +157,6 @@ class MySQLQuizDataService extends QuizDataService {
             else return new Result(false, null);
 
         } catch(e) {
-			console.log(e.code, e.errno);
-
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
         }

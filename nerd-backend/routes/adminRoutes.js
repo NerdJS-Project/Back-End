@@ -79,7 +79,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/admin/delete/class/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .delete("/api/admin/delete/class/:id", AuthService.authenticate, async(req, res) => {
 
         /**
          * @type {ClassService}
@@ -169,7 +169,7 @@ router
     *       500:
     *         description: An internal error occured.
     */
-    .delete("/api/admin/delete/user/:id", [AuthService.verifyToken, AuthService.verifyUserType], async(req, res) => {
+    .delete("/api/admin/delete/user/:id", AuthService.authenticate, async(req, res) => {
 
         /**
          * @type {userService}

@@ -20,7 +20,6 @@ class MySQLClassService extends ClassService {
      * @returns {Promise<Result<boolean>} 
      */
     async createClass(classDTO) {
-        console.log(classDTO);
         const createClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "INSERT INTO classes (class_id, class_name, class_descrip, user_class, instructor_id) VALUES(?,?,?,?,?);",
@@ -100,7 +99,6 @@ class MySQLClassService extends ClassService {
             return new Result(id, null);
 
         } catch(e) {
-            console.log(e);
             return new Result(null, new IError(e.code, e.sqlMessage));
         }
     }
@@ -120,7 +118,6 @@ class MySQLClassService extends ClassService {
             }, (err, results) => {
                 
                 if(err){
-                    console.log(err);
                     return reject(err);
                 }
 
@@ -178,6 +175,71 @@ class MySQLClassService extends ClassService {
         }
     }
 
+        /**
+     * @returns {Promise<Result<number>>} 
+     */
+      async getClassCount(){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getClassCountCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT COUNT(*) FROM classes;",
+                values: []
+            }, (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                if(!results || results.length === 0){
+                    var err = new Error("No classes found");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const classCount = await getClassCountCMD;
+            return new Result(classCount, null);
+
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
+     /**
+     * @returns {Promise<Result<import("../ClassService").Class>>} 
+     */
+      async getAllClasses(offset, limit){
+        /**
+         * @type {Promise<import("../ClassService").Class>}
+         */
+        const getAllClassesCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql:"SELECT * FROM classes LIMIT ? OFFSET ?;",
+                values: [parseInt(limit), parseInt(offset)]
+            }, (err, results) => {
+                if(err){
+                    return reject(err);
+                }
+                if(!results || results.length === 0){
+                    var err = new Error("No classes found");
+                    err.errno = 1404;
+                    err.code = "NOT FOUND";
+                    return reject(err);
+                }
+                resolve(results);
+            });
+        });
+        try{
+            const allClasses = await getAllClassesCMD;
+            return new Result(allClasses, null);
+        } catch(e) {
+            return new Result(null, new IError(e.code, e.sqlMessage));
+        }
+    }
+
     /**
      * @param {import("../ClassService").ClassDTO} classDTO
      * @returns {Promise<Result<import("../ClassService").Class>>} 
@@ -188,7 +250,7 @@ class MySQLClassService extends ClassService {
          */
         const getClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
-                sql:"SELECT class_name, class_id, class_descrip, user_id, user_name as instructor_name from classes, user_table where classes.user_class = user_table.user_id and class_name like ?;",
+                sql:"SELECT class_name, class_id, class_descrip, user_id, user_name as instructor_name from classes, user_table where class_name like ? group by class_id;",
                 values: [classDTO.class_name]
             }, (err, results) => {
                 if(err){
@@ -435,10 +497,9 @@ class MySQLClassService extends ClassService {
         const deleteClassCMD = new Promise((resolve, reject) => {
             this.connection.query({
                 sql: "DELETE c, m FROM classes c JOIN modules m ON c.class_id=m.class_id WHERE c.class_id=?;",
-                values:[classDTO.class_id]
+                values:[classDTO.class_id, classDTO.class_id]
             },
             (err, results) => {
-                
                 if(err) {
                     return reject(err);
                 }
@@ -449,11 +510,38 @@ class MySQLClassService extends ClassService {
         try{
             const results = await deleteClassCMD;
             if(results.affectedRows>0) return new Result(true, null);
+            else return this.deleteClassAbsolute(classDTO);
+
+        } catch(e) {
+			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
+            
+        }
+    }
+
+     /**
+     * @param {import("../ClassService").ClassDTO} classDTO
+     * @returns {Promise<Result<boolean>>}
+     */
+      async deleteClassAbsolute(classDTO) {
+        const deleteClassAbsoluteCMD = new Promise((resolve, reject) => {
+            this.connection.query({
+                sql: "DELETE from classes where class_id=?;",
+                values:[classDTO.class_id, classDTO.class_id]
+            },
+            (err, results) => {
+                if(err) {
+                    return reject(err);
+                }
+
+                resolve(results);
+            });
+        });
+        try{
+            const results = await deleteClassAbsoluteCMD;
+            if(results.affectedRows>0) return new Result(true, null);
             else return new Result(false, null);
 
         } catch(e) {
-			console.log("delete class",e.code, e.errno);
-
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
         }
@@ -484,8 +572,6 @@ class MySQLClassService extends ClassService {
             else return new Result(false, null);
 
         } catch(e) {
-			console.log(e.code, e.errno);
-
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
         }

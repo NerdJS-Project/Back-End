@@ -195,8 +195,6 @@ class MySQLQuizService extends QuizService {
             else return new Result(false, null);
 
         } catch(e) {
-			console.log(e.code, e.errno);
-
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
         }
