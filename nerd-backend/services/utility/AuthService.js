@@ -39,7 +39,6 @@ async function verifyClassInstructor(req, res, next){
 };
 
 async function getClassInstructorId(req, res, next){
-    console.log(req.params);
     /**
     * @type {ClassService}
     */

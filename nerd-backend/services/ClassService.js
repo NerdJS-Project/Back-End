@@ -23,28 +23,39 @@
       * @param {ClassDTO} classDTO
       * @returns {Promise<Result<Class>>}
       */
-     createClass(classDTO) { }
+    async createClass(classDTO) { }
 
+     /**
+      * @param {number} offset
+      * @param {number} limit
+      * @returns {Promise<Result<Class>>}
+      */
+    async getAllClasses(offSet,limit) { }
 
      /**
       * @param {number} class_id
       * @returns {Promise<Result<boolean>>} 
       */
-     deleteClass(class_id) { }
+    async deleteClass(class_id) { }
 
 
      /**
       * @param {ClassDTO} classDTO
       * @returns {Promise<Result<Class>>}
       */
-     updateClass(classDTO) { }
+    async updateClass(classDTO) { }
  
 
      /**
       * @param {ClassDTO} classDTO
       * @returns {Promise<Result<Class>>}
       */
-     getClass(classDTO){ }
+    async getClass(classDTO){ }
+
+     /**
+      * @returns {Promise<number>}
+      */
+      async getClassCount(){ }
 
          /**
      * @param {ClassDTO} classDTO
