@@ -52,7 +52,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log("view failed to fetch...",err);
                     return reject(err);
                 }
                 resolve(results);
@@ -78,7 +77,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -105,7 +103,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -132,7 +129,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -158,7 +154,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -184,7 +179,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -211,7 +205,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -237,7 +230,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -263,7 +255,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -290,7 +281,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -317,7 +307,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -344,7 +333,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -370,7 +358,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);
@@ -396,7 +383,6 @@ class MySQLProgressService extends ProgressService {
             },
             (err, results) => {
                 if(err) {
-                    console.log(err);
                     return reject(err);
                 }
                 resolve(results);

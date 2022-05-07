@@ -385,6 +385,130 @@ router
 
     })
 
+            /**
+    * @swagger
+    * /class/getClassCount:
+    *   get:
+    *     tags:
+    *       - Class
+    *     summary: Retrieve classes by name.
+    *     description: Retrieve all classes by class name.
+    *     responses:
+    *       200:
+    *         description: Retrieved all classes by class name.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 class_count:
+    *                   type: integer
+    *       400:
+    *         description: The class was not retrieved.
+    *       401:
+    *         description: The class was not retrieved because the user is not authorized
+    *       403:
+    *         description: The class was not retrieved because no token was provided in header
+    *       500:
+    *         description: An internal error occured.
+    */
+    .get("/api/class/getClassCount", async(req, res) => {
+
+        /**
+         * @type {ClassService}
+         */
+        const classService = ServiceLocator.getService(ClassService.name);
+        try{
+            const { payload: result, error } = await classService.getClassCount();
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        class_count = result[0]["COUNT(*)"]
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in classRoutes, get/classCount");
+            res.status(500).end();
+        }
+
+    })
+
+        /**
+    * @swagger
+    * /class/getAllClasses/{offset}/{limit}:
+    *   get:
+    *     tags:
+    *       - Class
+    *     summary: Retrieve classes by name.
+    *     description: Retrieve all classes by class name.
+    *     parameters:
+    *       - in: path
+    *         name: offset
+    *         required: true
+    *         description: Offset for pagination
+    *         type: integer
+    *       - in: path
+    *         name: limit
+    *         required: true
+    *         description: Limit for pagination
+    *         type: integer
+    *     responses:
+    *       200:
+    *         description: Retrieved all classes by class name.
+    *         content:
+    *           application/json:
+    *             schema:
+    *               type: object
+    *               properties:
+    *                 class_id:
+    *                   type: string
+    *                   example: "a2c77990-6baa-4fee-bc5a-0396dbd791d4"
+    *                 class_name:
+    *                   type: string
+    *                   example: "class-1"
+    *                 class_descrip:
+    *                   type: string
+    *                   example: "this is a class"
+    *                 instructor_id:
+    *                   type: integer
+    *                 user_class:
+    *                   type: integer
+    *       400:
+    *         description: The class was not retrieved.
+    *       401:
+    *         description: The class was not retrieved because the user is not authorized
+    *       403:
+    *         description: The class was not retrieved because no token was provided in header
+    *       500:
+    *         description: An internal error occured.
+    */
+    .get("/api/class/getAllClasses/:offset/:limit", async(req, res) => {
+
+        /**
+         * @type {ClassService}
+         */
+        const classService = ServiceLocator.getService(ClassService.name);
+        try{
+            const { payload: result, error } = await classService.getAllClasses(req.params.offset, req.params.limit);
+            if(error) {
+                res.status(400).json(error);
+            } else {
+                res
+                    .status(200)
+                    .json(
+                        result
+                    );
+            }
+        }catch(e){
+            console.log("an error occured in classRoutes, get/AllClasses");
+            res.status(500).end();
+        }
+
+    })
+
     /**
     * @swagger
     * /class/findByName/{name}:

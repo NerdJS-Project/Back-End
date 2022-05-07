@@ -56,7 +56,6 @@ class MySQLUserService extends UserService {
                 sql:"SELECT * FROM user_table WHERE user_email=?;",
                 values: [userDTO.user_email]
             }, (err, results) => {
-                console.log(results);
                 if(err){
                     return reject(err);
                 }
@@ -194,8 +193,6 @@ class MySQLUserService extends UserService {
             else return new Result(false, null);
 
         } catch(e) {
-			console.log(e.code, e.errno);
-
 			return new IError(`Unhandled error ${e.code} - ${e.errno}`, e.errno);
             
         }
